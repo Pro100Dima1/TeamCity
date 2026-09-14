@@ -1,6 +1,7 @@
-package api.models.project;
+package api.models.build_type;
 
 import api.models.BaseModel;
+import api.models.project.ProjectResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,13 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Project extends BaseModel {
+public class CreateBuildTypeRequest extends BaseModel {
     private String id;
-    private String internalId;
     private String name;
-    private String parentProjectId;
-    private String description;
-    private String href;
-    private String webUrl;
-    private String locator;
+    private String projectId;
+    private ProjectResponse project;
 }

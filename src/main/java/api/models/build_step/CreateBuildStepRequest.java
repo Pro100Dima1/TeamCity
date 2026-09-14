@@ -1,4 +1,4 @@
-package api.models.agent;
+package api.models.build_step;
 
 import api.models.BaseModel;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthorizedInfo extends BaseModel {
-    private Boolean status;
+public class CreateBuildStepRequest extends BaseModel {
+    private String id;
+    private String name;
+    private String type;
+    private Boolean disabled;
+    private Properties properties;
 }

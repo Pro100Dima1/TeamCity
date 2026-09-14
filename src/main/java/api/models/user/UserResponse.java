@@ -1,7 +1,6 @@
-package api.models.build_type;
+package api.models.user;
 
 import api.models.BaseModel;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BuildTypes extends BaseModel {
-    private Integer count;
-    private List<BuildType> buildType;
+public class UserResponse extends BaseModel {
+    private String id;
+    private String username;
+    private String name;
+    private String email;
+    private String href;
 }

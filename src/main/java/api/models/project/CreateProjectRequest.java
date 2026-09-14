@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewProjectDescription extends BaseModel {
+public class CreateProjectRequest extends BaseModel {
     private String name;
     private String id;
     private String description;
-    private Project parentProject;
+    /** Parent stub: set id or locator, e.g. locator="_Root". */
+    private ProjectResponse parentProject;
 }

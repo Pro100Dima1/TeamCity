@@ -1,6 +1,7 @@
-package api.models.build_step;
+package api.models.build_type;
 
 import api.models.BaseModel;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Step extends BaseModel {
-    private String id;
-    private String name;
-    private String type;
-    private Boolean disabled;
-    private Properties properties;
-    private String shortDescription;
+public class BuildTypesResponse extends BaseModel {
+    private Integer count;
+    private List<BuildTypeResponse> buildType;
 }

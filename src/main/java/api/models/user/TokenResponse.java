@@ -1,7 +1,6 @@
-package api.models.agent;
+package api.models.user;
 
 import api.models.BaseModel;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Agents extends BaseModel {
-    private Integer count;
-    private List<Agent> agent;
+public class TokenResponse extends BaseModel {
+    private String name;
+    private String value;
+    private String creationTime;
+    private String expirationTime;
 }

@@ -1,7 +1,6 @@
-package api.models.build_type;
+package api.models.agent;
 
 import api.models.BaseModel;
-import api.models.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,12 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BuildType extends BaseModel {
-    private String id;
+public class AgentResponse extends BaseModel {
+    private Integer id;
     private String name;
-    private String projectId;
-    private String projectName;
-    private Project project;
+    private Integer typeId;
+    private Boolean connected;
+    private Boolean enabled;
+    private Boolean authorized;
     private String href;
     private String webUrl;
 }
