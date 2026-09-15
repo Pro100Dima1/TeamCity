@@ -1,8 +1,8 @@
 package api.requesters;
 
+import api.requesters.interfaces.Endpoints;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import org.example.requesters.interfaces.Endpoints;
 
 public class HttpRequest {
     protected RequestSpecification requestSpecification;
