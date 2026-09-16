@@ -21,10 +21,16 @@ public class HttpRequester extends HttpRequest implements HttpEndpointInterface 
 
     public ValidatableResponse post(BaseModel baseModel) {
         var body = baseModel == null ? "" : baseModel;
-        return given()
+        var request = given()
                 .spec(requestSpecification)
-                .pathParams(pathParams)
-                .body(body)
+                .body(body);
+
+        // Добавляем параметры пути только если мапа не пустая
+        if (pathParams != null && !pathParams.isEmpty()) {
+            request.pathParams(pathParams);
+        }
+
+        return request
                 .post(endpoints.getUrl())
                 .then()
                 .assertThat()
@@ -33,9 +39,14 @@ public class HttpRequester extends HttpRequest implements HttpEndpointInterface 
 
     @Override
     public ValidatableResponse post() {
-        return given()
-                .spec(requestSpecification)
-                .pathParams(pathParams)
+        var request = given()
+                .spec(requestSpecification);
+
+        if (pathParams != null && !pathParams.isEmpty()) {
+            request.pathParams(pathParams);
+        }
+
+        return request
                 .post(endpoints.getUrl())
                 .then()
                 .assertThat()
@@ -44,9 +55,14 @@ public class HttpRequester extends HttpRequest implements HttpEndpointInterface 
 
     @Override
     public ValidatableResponse get() {
-        return given()
-                .spec(requestSpecification)
-                .pathParams(pathParams)
+        var request = given()
+                .spec(requestSpecification);
+
+        if (pathParams != null && !pathParams.isEmpty()) {
+            request.pathParams(pathParams);
+        }
+
+        return request
                 .get(endpoints.getUrl())
                 .then()
                 .assertThat()
@@ -55,9 +71,14 @@ public class HttpRequester extends HttpRequest implements HttpEndpointInterface 
 
     @Override
     public ValidatableResponse put() {
-        return given()
-                .spec(requestSpecification)
-                .pathParams(pathParams)
+        var request = given()
+                .spec(requestSpecification);
+
+        if (pathParams != null && !pathParams.isEmpty()) {
+            request.pathParams(pathParams);
+        }
+
+        return request
                 .put(endpoints.getUrl())
                 .then()
                 .assertThat()
@@ -66,10 +87,15 @@ public class HttpRequester extends HttpRequest implements HttpEndpointInterface 
 
     public ValidatableResponse put(BaseModel baseModel) {
         var body = baseModel == null ? "" : baseModel;
-        return given()
+        var request = given()
                 .spec(requestSpecification)
-                .pathParams(pathParams)
-                .body(body)
+                .body(body);
+
+        if (pathParams != null && !pathParams.isEmpty()) {
+            request.pathParams(pathParams);
+        }
+
+        return request
                 .put(endpoints.getUrl())
                 .then()
                 .assertThat()
@@ -78,10 +104,15 @@ public class HttpRequester extends HttpRequest implements HttpEndpointInterface 
 
     @Override
     public ValidatableResponse delete() {
-        return given()
-                .spec(requestSpecification)
-                .pathParams(pathParams)
-                .pathParams(pathParams)
+        var request = given()
+                .spec(requestSpecification);
+
+        // Убран дубликат вызова pathParams, добавлена проверка на пустоту
+        if (pathParams != null && !pathParams.isEmpty()) {
+            request.pathParams(pathParams);
+        }
+
+        return request
                 .delete(endpoints.getUrl())
                 .then()
                 .assertThat()

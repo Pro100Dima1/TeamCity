@@ -14,6 +14,8 @@ import api.models.build_step.CreateBuildStepRequest;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.BuildTypesResponse;
 import api.models.build_type.CreateBuildTypeRequest;
+import api.models.project.CreateProjectRequest;
+import api.models.project.ProjectResponse;
 import api.models.user.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +41,7 @@ public enum Endpoints {
     CREATE_USER(
             "/app/rest/users",
             CreateUserRequest.class,
-            UsersResponse.class
+            UserResponse.class
     ),
     DELETE_USER(
             "/app/rest/users/{userLocator}",
@@ -47,8 +49,8 @@ public enum Endpoints {
             BaseModel.class
     ),
     CREATE_TOKEN(
-            "/app/rest/users/{userLocator}/tokens",
-            CreateTokenRequest.class,
+            "/app/rest/users/{userLocator}/tokens/{tokenName}",
+            BaseModel.class,
             TokenResponse.class
     ),
     GET_LIST_TOKEN(
@@ -165,7 +167,24 @@ public enum Endpoints {
             "/app/rest/builds",
             BaseModel.class,
             BuildsResponse.class
+    ),
+    CREATE_PROJECT(
+            "/app/rest/projects",
+            CreateProjectRequest.class,
+            ProjectResponse.class
+    ),
+    DELETE_PROJECT(
+            "/app/rest/projects/{projectLocator}",
+            BaseModel.class,
+            BaseModel.class
+    ),
+    GET_BUILD_STATUS_TEXT(
+            "/app/rest/builds/{buildLocator}/statusText",
+            BaseModel.class,
+            BaseModel.class
     );
+
+
     private final String url;
     private final Class<? extends BaseModel> requestModel;
     private final Class<? extends BaseModel> responseModel;

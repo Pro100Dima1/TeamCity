@@ -5,12 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f47b5f15-288e-4710-aab5-0e7df178695f" name="Changes" comment="Models API">
-      <change afterPath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequester.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/api/requesters/ValidatedHttpRequester.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/AgentTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/AuthorizationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/BuildQueueTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/BuildResultTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/BuildTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/BuildWaitTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/ProjectTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/api/TokenTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/BaseModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/BaseModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequester.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/ValidatedHttpRequester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/ValidatedHttpRequester.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/specs/RequestSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/specs/RequestSpecs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/specs/ResponseSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/specs/ResponseSpecs.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,11 +64,23 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.AgentTests.executor": "Run",
+    "JUnit.AuthorizationTests.executor": "Run",
+    "JUnit.AuthorizationTests.invalidCredentialsAuthorizationTest.executor": "Run",
+    "JUnit.AuthorizationTests.successAuthorizationTest.executor": "Run",
+    "JUnit.BuildQueueTests.executor": "Run",
+    "JUnit.BuildResultTests.executor": "Run",
+    "JUnit.BuildTests.executor": "Run",
+    "JUnit.BuildWaitTests.executor": "Run",
+    "JUnit.ProjectTests.executor": "Run",
+    "JUnit.TokenTests (1).executor": "Run",
+    "JUnit.TokenTests.createTokenForUserTest.executor": "Run",
+    "JUnit.TokenTests.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#4 on API",
+    "git-widget-placeholder": "nikita__tests",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/AlesiaSapezhka/IdeaProjects/teamCity",
     "node.js.detected.package.eslint": "true",
@@ -73,18 +95,91 @@
       <recent name="C:\Users\AlesiaSapezhka\IdeaProjects\TeamCity\TC\src\main\java" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
+  <component name="RunManager" selected="JUnit.BuildResultTests">
+    <configuration name="BuildQueueTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.BuildQueueTests" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+    <configuration name="BuildResultTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="TeamCity" />
-      <option name="filePath" />
-      <method v="2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.BuildResultTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
+    <configuration name="BuildTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.BuildTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BuildWaitTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.BuildWaitTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ProjectTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.ProjectTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.BuildResultTests" />
+        <item itemvalue="JUnit.BuildWaitTests" />
+        <item itemvalue="JUnit.BuildQueueTests" />
+        <item itemvalue="JUnit.BuildTests" />
+        <item itemvalue="JUnit.ProjectTests" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

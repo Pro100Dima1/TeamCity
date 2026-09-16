@@ -16,6 +16,11 @@ public class ValidatedHttpRequester<T extends BaseModel> extends HttpRequest imp
         this.httpRequester = new HttpRequester(requestSpecification, responseSpecification, endpoints, Map.of());
     }
 
+    public ValidatedHttpRequester(RequestSpecification requestSpecification, ResponseSpecification responseSpecification, Endpoints endpoints, Map<String, ?> pathParams) {
+        super(requestSpecification, responseSpecification, endpoints);
+        this.httpRequester = new HttpRequester(requestSpecification, responseSpecification, endpoints, pathParams);
+    }
+
     public Object post(BaseModel baseModel) {
         return (T) httpRequester.post(baseModel).extract().as(endpoints.getResponseModel());
     }
@@ -35,7 +40,7 @@ public class ValidatedHttpRequester<T extends BaseModel> extends HttpRequest imp
     }
 
     @Override
-    public Object put( ) {
+    public Object put() {
         return (T) httpRequester.put().extract().as(endpoints.getResponseModel());
     }
 

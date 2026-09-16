@@ -2,13 +2,13 @@ package api.specs;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
-import org.apache.http.entity.ContentType;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 
 public class ResponseSpecs {
 
-    private ResponseSpecs() {}
+    private ResponseSpecs() {
+    }
 
     private static ResponseSpecBuilder defaultResponseBuilder() {
         return new ResponseSpecBuilder();
@@ -63,7 +63,7 @@ public class ResponseSpecs {
 
     public static ResponseSpecification entityWasDeleted() {
         return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_OK)
+                .expectStatusCode(HttpStatus.SC_NO_CONTENT)
                 .build();
     }
 
@@ -77,9 +77,7 @@ public class ResponseSpecs {
     public static ResponseSpecification successPlainResponse() {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_OK)
-                .expectContentType(ContentType.TEXT_PLAIN.getMimeType() + ";charset=UTF-8")
+                .expectHeader("Content-Type", Matchers.containsString("text/plain"))
                 .build();
     }
-
-
 }
