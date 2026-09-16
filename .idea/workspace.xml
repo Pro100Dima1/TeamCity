@@ -5,11 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f47b5f15-288e-4710-aab5-0e7df178695f" name="Changes" comment="Models API">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/agent/AgentResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/agent/AgentResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/agent/AgentsResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/agent/AuthorizeAgentRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/agent/AuthorizeAgentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build/BuildResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build/BuildResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build/BuildsResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build/RunBuildRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build/RunBuildRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_type/BuildTypeResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_type/BuildTypeResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_type/BuildTypesResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_type/CreateBuildTypeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_type/CreateBuildTypeRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/api/models/project/CreateProjectRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/project/CreateProjectRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/user/CreateTokenRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/user/CreateTokenRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/project/ProjectResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/project/ProjectResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/api/models/user/CreateUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/user/CreateUserRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/user/UserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/user/UserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/HttpRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/HttpEndpointInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/specs/RequestSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/specs/RequestSpecs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/specs/ResponseSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/specs/ResponseSpecs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/model-comparison.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/model-comparison.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,11 +73,28 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.CreateAgentTest.testCreateAgent.executor": "Run",
+    "JUnit.CreateAndRunBuildTest.executor": "Run",
+    "JUnit.CreateAndRunBuildTest.userCanCreateBuildWithValidData.executor": "Run",
+    "JUnit.CreateBuildTest.executor": "Run",
+    "JUnit.CreateBuildTest.userCanCreateBuildWithValidData.executor": "Run",
+    "JUnit.CreateProjectTest.executor": "Run",
+    "JUnit.CreateProjectTest.superUserCanCreateProjectWithValidData.executor": "Run",
+    "JUnit.CreateProjectTest.userCanCreateProjectWithValidData.executor": "Run",
+    "JUnit.CreateProjectTest.userCanNotCreateProjectWithBlankName.executor": "Run",
+    "JUnit.CreateUserTest.adminCanCreateUserWithValidData.executor": "Run",
+    "JUnit.CreateUserTest.executor": "Run",
+    "JUnit.CreateUserTest.superUserCanCreateUserWithValidData.executor": "Run",
+    "JUnit.CreateUserTest.superUserCanNotCreateUserWithBlankName.executor": "Run",
+    "JUnit.CreateUserTest.superUserCanNotCreateUserWithBlankPassword.executor": "Run",
+    "JUnit.CreateUserTest.userCanCreateUserWithValidData.executor": "Run",
+    "JUnit.RunBuildTest.executor": "Run",
+    "JUnit.RunBuildTest.userCanCreateBuildWithValidData.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "nikita__update__config__generators",
+    "git-widget-placeholder": "#4 on API",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/AlesiaSapezhka/IdeaProjects/teamCity"
   }
@@ -68,10 +105,99 @@
       <recent name="C:\Users\AlesiaSapezhka\IdeaProjects\TeamCity\TC\src\main\java" />
     </key>
   </component>
+  <component name="RunManager" selected="JUnit.CreateAndRunBuildTest">
+    <configuration name="CreateAndRunBuildTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateAndRunBuildTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateAndRunBuildTest.testCreateAgent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateAndRunBuildTest" />
+      <option name="METHOD_NAME" value="testCreateAgent" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateAndRunBuildTest.userCanCreateBuildWithValidData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateAndRunBuildTest" />
+      <option name="METHOD_NAME" value="userCanCreateBuildWithValidData" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateBuildTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateBuildTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateBuildTest.userCanCreateBuildWithValidData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateBuildTest" />
+      <option name="METHOD_NAME" value="userCanCreateBuildWithValidData" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.CreateAndRunBuildTest" />
+        <item itemvalue="JUnit.CreateAndRunBuildTest.userCanCreateBuildWithValidData" />
+        <item itemvalue="JUnit.CreateAndRunBuildTest.testCreateAgent" />
+        <item itemvalue="JUnit.CreateBuildTest" />
+        <item itemvalue="JUnit.CreateBuildTest.userCanCreateBuildWithValidData" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
       </set>
     </attachedChunks>
   </component>
@@ -91,7 +217,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789313304817</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Models API">
+      <option name="closed" value="true" />
+      <created>1789471999146</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1789471999146</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

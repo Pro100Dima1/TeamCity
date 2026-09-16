@@ -1,7 +1,6 @@
 package api.models.build;
 
 import api.models.BaseModel;
-import api.models.build_type.BuildTypeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RunBuildRequest extends BaseModel {
-    private String buildTypeId;
-    private BuildTypeResponse buildType;
+
+    private BuildTypeReference buildType;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class BuildTypeReference {
+
+        private String id;
+    }
 }

@@ -1,27 +1,28 @@
 package api.specs;
 
 import api.configs.Config;
-import api.models.LoginUserRequest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
-public class RequestSpecs {
-    private static final Log log = LogFactory.getLog(RequestSpecs.class);
+public final class RequestSpecs {
 
-    private RequestSpecs() {}
+    private RequestSpecs() {
+    }
 
     private static RequestSpecBuilder defaultRequestBuilder() {
-        String baseUrl = Config.getProperty("apiBaseUrl") != null
-                ? Config.getProperty("apiBaseUrl")
-                : Config.getProperty("apiServer");
+        return defaultRequestBuilder(restBasePath());
+    }
 
-        if (baseUrl == null) {
+    private static RequestSpecBuilder defaultRequestBuilder(String restPath) {
+        String baseUrl = Config.getProperty("apiBaseUrl");
+        if (baseUrl == null || baseUrl.isBlank()) {
             baseUrl = "http://localhost:8111";
         }
 
@@ -32,70 +33,55 @@ public class RequestSpecs {
                         new RequestLoggingFilter(),
                         new ResponseLoggingFilter()
                 ))
-                .setBaseUri(baseUrl)
-                .setBasePath(Config.getProperty("apiVersion"));
+                .setBaseUri(baseUrl + restPath);
     }
 
-    public static RequestSpecification textPlainAuthSpec(String username, String password) {
-        String token = getUserToken(username, password);
-        String authorizationHeader = (token.startsWith("Bearer ") || token.startsWith("Basic "))
-                ? token
-                : "Bearer " + token;
-
-        return defaultRequestBuilder()
-                .setContentType(ContentType.TEXT)
-                .addHeader("Authorization", authorizationHeader)
-                .build();
-    }
-
-    public static RequestSpecification unauthSpec() {
-        return defaultRequestBuilder().build();
-    }
-
-    public static RequestSpecification authAsUser(String username, String password) {
-        String token = getUserToken(username, password);
-
-        String authorizationHeader = (token.startsWith("Bearer ") || token.startsWith("Basic "))
-                ? token
-                : "Bearer " + token;
-
-        return defaultRequestBuilder()
-                .addHeader("Authorization", authorizationHeader)
-                .build();
-    }
-
-    public static String getUserToken(String username, String password) {
-        String baseUrl = Config.getProperty("apiBaseUrl") != null
-                ? Config.getProperty("apiBaseUrl").trim()
-                : "http://localhost:8111";
-
-        String apiVersion = Config.getProperty("apiVersion") != null ? Config.getProperty("apiVersion").trim() : "";
-
-        LoginUserRequest loginBody = LoginUserRequest.builder()
-                .username(username)
-                .password(password)
-                .build();
-
-        String token = io.restassured.RestAssured.given()
-                .noFilters()
-                .baseUri(baseUrl)
-                .basePath(apiVersion)
-                .contentType(io.restassured.http.ContentType.JSON)
-                .accept(io.restassured.http.ContentType.JSON)
-                .body(loginBody)
-                .log().all()
-                .post("/auth/login")
-                .then()
-                .log().ifValidationFails()
-                .statusCode(200)
-                .extract()
-                .header("Authorization");
-
-        if (token == null || token.isEmpty()) {
-            throw new IllegalStateException("Пустой заголовок 'Authorization'");
+    private static String restBasePath() {
+        String configured = Config.getProperty("apiVersion");
+        if (configured != null && !configured.isBlank()) {
+            return configured.trim();
         }
-
-        return token;
+        return "/app/rest";
     }
 
+    /** Юзер из config: user.token (Bearer) или user.username/password (Basic). */
+    public static RequestSpecification userSpec() {
+        String token = Config.getProperty("user.token");
+        if (token != null && !token.isBlank()) {
+            return bearerSpec(token.trim());
+        }
+        String username = Config.getProperty("user.username");
+        String password = Config.getProperty("user.password");
+        if (username == null || username.isBlank() || password == null || password.isBlank()) {
+            throw new IllegalStateException(
+                    "Set user.token or user.username + user.password in config.properties / env"
+            );
+        }
+        return authAsUserSpec(username, password);
+    }
+
+    public static RequestSpecification authAsUserSpec(String username, String password) {
+        return defaultRequestBuilder()
+                .addHeader("Authorization", basicAuthHeader(username, password))
+                .build();
+    }
+
+    public static RequestSpecification bearerSpec(String token) {
+        if (token == null || token.isBlank()) {
+            throw new IllegalStateException(
+                    "user.token is null/empty. Put Personal Access Token into config.properties "
+                            + "as user.token=... or env USER_TOKEN"
+            );
+        }
+        String value = token.startsWith("Bearer ") ? token.substring("Bearer ".length()).trim() : token.trim();
+        return defaultRequestBuilder("/app/rest")
+                .addHeader("Authorization", "Bearer " + value)
+                .build();
+    }
+
+    public static String basicAuthHeader(String username, String password) {
+        String raw = (username == null ? "" : username) + ":" + (password == null ? "" : password);
+        String encoded = Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
+        return "Basic " + encoded;
+    }
 }

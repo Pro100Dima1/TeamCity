@@ -6,7 +6,8 @@ public class RandomData {
     private RandomData(){}
 
     public static String getUsername() {
-        return RandomStringUtils.randomAlphabetic(10);
+        // TeamCity нормализует username в lowercase
+        return RandomStringUtils.randomAlphabetic(10).toLowerCase();
     }
 
     public static String getPassword() {

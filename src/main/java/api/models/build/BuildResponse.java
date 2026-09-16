@@ -14,14 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class BuildResponse extends BaseModel {
-    private Long id;
+    private Integer id;
     private String buildTypeId;
     private String number;
     private String status;
     private String statusText;
     private String state;
     private Boolean running;
-    private String href;
-    private String webUrl;
     private BuildTypeResponse buildType;
 }

@@ -2,22 +2,16 @@ package api.specs;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
-import org.apache.http.entity.ContentType;
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
+import static org.hamcrest.Matchers.equalTo;
 
-public class ResponseSpecs {
+public final class ResponseSpecs {
 
-    private ResponseSpecs() {}
+    private ResponseSpecs() {
+    }
 
     private static ResponseSpecBuilder defaultResponseBuilder() {
         return new ResponseSpecBuilder();
-    }
-
-    public static ResponseSpecification entityWasCreated() {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_CREATED)
-                .build();
     }
 
     public static ResponseSpecification requestReturnsOK() {
@@ -26,60 +20,20 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification successResponse() {
-        return requestReturnsOK();
-    }
-
-    public static ResponseSpecification badRequestResponse() {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .build();
-    }
-
-    public static ResponseSpecification unauthorizedResponse() {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_UNAUTHORIZED)
-                .build();
-    }
-
-    public static ResponseSpecification notFoundResponse() {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_NOT_FOUND)
-                .build();
-    }
-
-    public static ResponseSpecification requestReturnsBadRequest(String errorKey, String errorValue) {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .expectBody(errorKey, Matchers.equalTo(errorValue))
-                .build();
-    }
-
-    public static ResponseSpecification forbiddenResponse() {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_FORBIDDEN)
-                .build();
-    }
-
     public static ResponseSpecification entityWasDeleted() {
         return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_OK)
+                .expectStatusCode(HttpStatus.SC_NO_CONTENT)
                 .build();
     }
 
-    public static ResponseSpecification successResponseNoBody() {
+    public static ResponseSpecification requestReturnsBadRequest(
+            String expectedStatusText,
+            String expectedMessage) {
+
         return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_OK)
-                .expectBody(Matchers.emptyOrNullString())
+                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .expectBody("errors[0].statusText", equalTo(expectedStatusText))
+                .expectBody("errors[0].message", equalTo(expectedMessage))
                 .build();
     }
-
-    public static ResponseSpecification successPlainResponse() {
-        return defaultResponseBuilder()
-                .expectStatusCode(HttpStatus.SC_OK)
-                .expectContentType(ContentType.TEXT_PLAIN.getMimeType() + ";charset=UTF-8")
-                .build();
-    }
-
-
 }

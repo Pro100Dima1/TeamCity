@@ -1,17 +1,20 @@
 package api.requesters;
 
+import api.requesters.interfaces.Endpoints;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import org.example.requesters.interfaces.Endpoints;
 
-public class HttpRequest {
-    protected RequestSpecification requestSpecification;
-    protected ResponseSpecification responseSpecification;
-    protected Endpoints endpoints;
+public abstract class HttpRequest {
+    protected final RequestSpecification requestSpecification;
+    protected final ResponseSpecification responseSpecification;
+    protected final Endpoints endpoints;
 
-    public HttpRequest(RequestSpecification requestSpecification, ResponseSpecification responseSpecification, Endpoints endpoints) {
+    protected HttpRequest(
+            RequestSpecification requestSpecification,
+            Endpoints endpoints,
+            ResponseSpecification responseSpecification) {
         this.requestSpecification = requestSpecification;
-        this.responseSpecification = responseSpecification;
         this.endpoints = endpoints;
+        this.responseSpecification = responseSpecification;
     }
 }

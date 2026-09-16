@@ -18,8 +18,6 @@ public class ProjectResponse extends BaseModel {
     private String name;
     private String parentProjectId;
     private String description;
-    private String href;
-    private String webUrl;
     /** Write-only locator for stubs in POST/PUT bodies. */
     private String locator;
 }

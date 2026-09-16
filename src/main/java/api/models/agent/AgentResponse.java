@@ -19,6 +19,4 @@ public class AgentResponse extends BaseModel {
     private Boolean connected;
     private Boolean enabled;
     private Boolean authorized;
-    private String href;
-    private String webUrl;
 }

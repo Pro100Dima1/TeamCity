@@ -1,7 +1,7 @@
 package api.models.build_type;
 
 import api.models.BaseModel;
-import api.models.project.ProjectResponse;
+import api.models.build_step.BuildStepsResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,5 @@ public class BuildTypeResponse extends BaseModel {
     private String name;
     private String projectId;
     private String projectName;
-    private ProjectResponse project;
-    private String href;
-    private String webUrl;
+    private BuildStepsResponse steps;
 }
