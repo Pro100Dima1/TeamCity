@@ -47,7 +47,7 @@ public class HappyPathTest extends BaseTest {
 
         String buildTypeId = buildResponse.getId();
 
-//      Create Build step
+        // Create Build step
         CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
@@ -60,7 +60,7 @@ public class HappyPathTest extends BaseTest {
         );
 
         // Connect an Enable Agent
-        AgentResponse agent = AgentSteps.getAgent(1);
+        AgentResponse agent = AgentSteps.getAgent();
         AgentSteps.updateAgentEnabledStatus(agent.getId(), true, "Enable agent");
         AgentSteps.assertAgentReady(agent);
 

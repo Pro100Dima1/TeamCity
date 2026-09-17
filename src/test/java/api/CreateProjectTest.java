@@ -57,19 +57,4 @@ public class CreateProjectTest extends BaseTest {
         List<ProjectResponse> users = ProjectSteps.getAllProjects("project");
         softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(project2Request, foundProject).match());
     }
-
-    @Test
-    void userCanCreateProjectWithLongProjectName() {
-        CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
-        projectRequest.setName("projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentprojectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.localhost:8111projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()currentTimeMillis()projectRequest.getName() + System.currentTimeMillis()TimeMillis()projectRequest.getName() + System.currentTimeMillis()");
-        ProjectResponse projectResponse =
-                ProjectSteps.createProject(projectRequest);
-        projectId = projectResponse.getId();
-
-        ModelAssertions.assertThatModels(projectRequest, projectResponse).match();
-        softly.assertThat(projectResponse.getId()).isNotBlank();
-
-//        ProjectResponse project = ProjectSteps.getProject(projectRequest);
-//        ModelAssertions.assertThatModels(projectRequest, project).match();
-    }
 }

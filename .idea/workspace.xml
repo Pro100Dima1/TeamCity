@@ -4,20 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f47b5f15-288e-4710-aab5-0e7df178695f" name="Changes" comment="Wrote tests">
-      <change afterPath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" afterDir="false" />
+    <list default="true" id="f47b5f15-288e-4710-aab5-0e7df178695f" name="Changes" comment="Улучшения">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build/BuildResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build/BuildResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/specs/RequestSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/specs/RequestSpecs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/specs/ResponseSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/specs/ResponseSpecs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/steps/UserSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/steps/UserSteps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/api/CreateAndRunBuildTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/steps/AgentSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/steps/AgentSteps.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/api/CreateProjectTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/CreateProjectTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/api/CreateUserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/CreateUserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/api/RunBuildTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/RunBuildTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +69,7 @@
     "JUnit.CreateProjectTest.userCanCreateProjectWithValidData.executor": "Run",
     "JUnit.CreateProjectTest.userCanNotCreateProjectWithBlankName.executor": "Run",
     "JUnit.CreateProjectTest.userCanNotCreateProjectWithDuplicateId.executor": "Run",
+    "JUnit.CreateProjectTest.userCanNotCreateProjectWithLongProjectName.executor": "Run",
     "JUnit.CreateUserTest.adminCanCreateUserWithValidData.executor": "Run",
     "JUnit.CreateUserTest.executor": "Run",
     "JUnit.CreateUserTest.superUserCanCreateUserWithValidData.executor": "Run",
@@ -89,6 +82,7 @@
     "JUnit.RunBuildTest.userCanCreateBuildWithValidData.executor": "Run",
     "JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration.executor": "Run",
     "JUnit.RunBuildTest.userCanNotRunBuildWithoutConnectedAgent.executor": "Run",
+    "JUnit.RunBuildTest.userCanRunBuildWithValidData.executor": "Run",
     "JUnit.api in TeamCity.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -96,7 +90,8 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "#8 on API-tests",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/AlesiaSapezhka/IdeaProjects/teamCity"
+    "last_opened_file_path": "C:/Users/AlesiaSapezhka/IdeaProjects/teamCity",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -105,8 +100,21 @@
       <recent name="C:\Users\AlesiaSapezhka\IdeaProjects\TeamCity\TC\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.RunBuildTest">
-    <configuration name="HappyPathTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.CreateUserTest.userCanCreateUserWithValidData">
+    <configuration name="All API Tests" type="JUnit" factoryName="JUnit">
+      <module name="TeamCity" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <envs>
+        <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
+      </envs>
+      <dir value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateBuildTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="TeamCity" />
       <extension name="coverage">
         <pattern>
@@ -115,7 +123,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="api" />
-      <option name="MAIN_CLASS_NAME" value="api.HappyPathTest" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateBuildTest" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <envs>
@@ -125,7 +133,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="HappyPathTest.userCanCreateBuildWithValidData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CreateProjectTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="TeamCity" />
       <extension name="coverage">
         <pattern>
@@ -134,12 +142,28 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="api" />
-      <option name="MAIN_CLASS_NAME" value="api.HappyPathTest" />
-      <option name="METHOD_NAME" value="userCanCreateBuildWithValidData" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateProjectTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
       <envs>
         <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
       </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateUserTest.userCanCreateUserWithValidData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateUserTest" />
+      <option name="METHOD_NAME" value="userCanCreateUserWithValidData" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -163,7 +187,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="RunBuildTest.userCanRunBuildWithValidData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="TeamCity" />
       <extension name="coverage">
         <pattern>
@@ -173,26 +197,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="api" />
       <option name="MAIN_CLASS_NAME" value="api.RunBuildTest" />
-      <option name="METHOD_NAME" value="userCanNotRunBuildWithoutBuildConfiguration" />
-      <option name="TEST_OBJECT" value="method" />
-      <envs>
-        <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
-      </envs>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RunBuildTest.userCanNotRunBuildWithoutConnectedAgent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="TeamCity" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="api.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="api" />
-      <option name="MAIN_CLASS_NAME" value="api.RunBuildTest" />
-      <option name="METHOD_NAME" value="userCanNotRunBuildWithoutConnectedAgent" />
+      <option name="METHOD_NAME" value="userCanRunBuildWithValidData" />
       <option name="TEST_OBJECT" value="method" />
       <envs>
         <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
@@ -202,19 +207,20 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="JUnit.All API Tests" />
+      <item itemvalue="JUnit.CreateUserTest.userCanCreateUserWithValidData" />
+      <item itemvalue="JUnit.RunBuildTest.userCanRunBuildWithValidData" />
+      <item itemvalue="JUnit.CreateBuildTest" />
+      <item itemvalue="JUnit.CreateProjectTest" />
       <item itemvalue="JUnit.RunBuildTest" />
-      <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutConnectedAgent" />
-      <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" />
-      <item itemvalue="JUnit.HappyPathTest" />
-      <item itemvalue="JUnit.HappyPathTest.userCanCreateBuildWithValidData" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.CreateUserTest.userCanCreateUserWithValidData" />
         <item itemvalue="JUnit.RunBuildTest" />
-        <item itemvalue="JUnit.HappyPathTest" />
-        <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutConnectedAgent" />
-        <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" />
-        <item itemvalue="JUnit.HappyPathTest.userCanCreateBuildWithValidData" />
+        <item itemvalue="JUnit.RunBuildTest.userCanRunBuildWithValidData" />
+        <item itemvalue="JUnit.CreateBuildTest" />
+        <item itemvalue="JUnit.CreateProjectTest" />
       </list>
     </recent_temporary>
   </component>
@@ -257,7 +263,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789577883343</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Улучшения">
+      <option name="closed" value="true" />
+      <created>1789660946048</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1789660946048</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -274,6 +288,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Models API" />
     <MESSAGE value="Wrote tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Wrote tests" />
+    <MESSAGE value="Улучшения" />
+    <option name="LAST_COMMIT_MESSAGE" value="Улучшения" />
   </component>
 </project>

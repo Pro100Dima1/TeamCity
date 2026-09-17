@@ -14,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AgentSteps {
+
+    private final static int DEFAULT_AGENT_ID = 1;
+
     public static void updateAgentEnabledStatus(
             int agentId,
             boolean enabled,
@@ -40,11 +43,11 @@ public class AgentSteps {
         );
     }
 
-    public static AgentResponse getAgent(int agentId) {
+    public static AgentResponse getAgent() {
         return new ValidatedCrudRequester<AgentResponse>(
                 RequestSpecs.userSpec(),
                 Endpoints.AGENT,
                 ResponseSpecs.requestReturnsOK()
-        ).get(Map.of("agentLocator", "id:" + agentId));
+        ).get(Map.of("agentLocator", "id:" + DEFAULT_AGENT_ID));
     }
 }

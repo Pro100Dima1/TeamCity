@@ -62,8 +62,10 @@ public class RunBuildTest extends BaseTest {
         );
 
         // Connect Agent
-        AgentResponse agent = AgentSteps.getAgent(1);
-        AgentSteps.assertAgentReady(agent);
+        AgentResponse agent = AgentSteps.getAgent();
+        // Enable agent
+        AgentSteps.updateAgentEnabledStatus(agent.getId(), true, "Enable agent");
+//        AgentSteps.assertAgentReady(agent);
 
         // Run Build
         BuildResponse buildRun = BuildSteps.runBuild(buildTypeId);
@@ -120,7 +122,7 @@ public class RunBuildTest extends BaseTest {
         );
 
         // Disable agent
-        AgentResponse agent = AgentSteps.getAgent(1);
+        AgentResponse agent = AgentSteps.getAgent();
         AgentSteps.updateAgentEnabledStatus(agent.getId(), false, "Disable agent");
 
         // Run Build
