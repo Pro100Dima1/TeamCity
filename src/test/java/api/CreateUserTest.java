@@ -3,6 +3,7 @@ package api;
 import api.models.comparison.ModelAssertions;
 import api.models.user.CreateUserRequest;
 import api.models.user.UserResponse;
+import api.steps.BuildSteps;
 import api.steps.UserSteps;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class CreateUserTest extends BaseTest {
 
     @Test
     void userCanCreateUserWithValidData() {
-        CreateUserRequest createUserRequest = UserSteps.buildUserValid();
+        CreateUserRequest createUserRequest = BuildSteps.buildUserValid();
         UserResponse createUserResponse = UserSteps.createUserValid(createUserRequest);
         createdUsername = createUserResponse.getUsername();
 
@@ -38,7 +39,7 @@ public class CreateUserTest extends BaseTest {
 
     @Test
     void userCanNotCreateUserWithBlankName() {
-        CreateUserRequest createUserRequest = UserSteps.buildUserBlankName();
+        CreateUserRequest createUserRequest = BuildSteps.buildUserBlankName();
         UserSteps.createUserInvalidName(createUserRequest);
 
         List<UserResponse> users = UserSteps.getAllUsers("user");
@@ -48,7 +49,7 @@ public class CreateUserTest extends BaseTest {
     // Баг, юзер успешно создался с пустым паролем
     @Test
     void userCanNotCreateUserWithBlankPassword() {
-        CreateUserRequest createUserRequest = UserSteps.buildUserBlankPassword();
+        CreateUserRequest createUserRequest = BuildSteps.buildUserBlankPassword();
         UserSteps.createUserInvalidPassword(createUserRequest);
 
         List<UserResponse> users = UserSteps.getAllUsers("user");

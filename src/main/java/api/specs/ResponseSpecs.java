@@ -19,9 +19,20 @@ public final class ResponseSpecs {
                 .expectStatusCode(HttpStatus.SC_OK)
                 .build();
     }
+    public static ResponseSpecification requestReturnsNotFound(
+        String expectedStatusText,
+        String expectedMessage) {
+
+            return defaultResponseBuilder()
+                    .expectStatusCode(HttpStatus.SC_NOT_FOUND)
+                    .expectBody("errors[0].statusText", equalTo(expectedStatusText))
+                    .expectBody("errors[0].message", equalTo(expectedMessage))
+                    .build();
+    }
+
 
     public static ResponseSpecification entityWasDeleted() {
-        return defaultResponseBuilder()
+        return ResponseSpecs.defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_NO_CONTENT)
                 .build();
     }
@@ -35,5 +46,9 @@ public final class ResponseSpecs {
                 .expectBody("errors[0].statusText", equalTo(expectedStatusText))
                 .expectBody("errors[0].message", equalTo(expectedMessage))
                 .build();
+    }
+
+    public static ResponseSpecification requestReturnsForbiddenRequestWithoutKey(String errorMessage) {
+        return defaultResponseBuilder().expectStatusCode(HttpStatus.SC_UNAUTHORIZED).expectBody(equalTo(errorMessage)).build();
     }
 }

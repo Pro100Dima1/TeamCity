@@ -31,4 +31,15 @@ public class Config {
         }
         return INSTANCE.properties.getProperty(key);
     }
+
+    public static String getToken() {
+        String token = System.getenv("TEAMCITY_TOKEN");
+
+        if (token == null || token.isBlank()) {
+            throw new IllegalStateException(
+                    "Environment variable TEAMCITY_TOKEN is not set");
+        }
+
+        return token;
+    }
 }

@@ -8,12 +8,14 @@ import api.models.build_type.CreateBuildTypeRequest;
 import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
-import api.steps.UserSteps;
+import api.steps.AgentSteps;
+import api.steps.BuildSteps;
+import api.steps.ProjectSteps;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 
-public class CreateAndRunBuildTest extends BaseTest {
+public class HappyPathTest extends BaseTest {
     private String projectId;
 
     @AfterEach
@@ -21,49 +23,50 @@ public class CreateAndRunBuildTest extends BaseTest {
         if (projectId == null || projectId.isBlank()) {
             return;
         }
-        UserSteps.deleteProject(projectId);
+        ProjectSteps.deleteProject(projectId);
         projectId = null;
     }
 
     @Test
     void userCanCreateBuildWithValidData() {
         // Create project
-        CreateProjectRequest projectRequest = UserSteps.buildProjectValid();
+        CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
 
         ProjectResponse projectResponse =
-                UserSteps.createProject(projectRequest);
+                ProjectSteps.createProject(projectRequest);
         projectId = projectResponse.getId();
 
         // Create Build
-        CreateBuildTypeRequest buildRequest = UserSteps.buildValid(projectId);
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(projectId);
 
         BuildTypeResponse buildResponse =
-                UserSteps.createBuild(buildRequest);
+                BuildSteps.createBuild(buildRequest);
 
         ModelAssertions.assertThatModels(buildRequest, buildResponse).match();
         softly.assertThat(buildResponse.getId()).isNotBlank();
 
         String buildTypeId = buildResponse.getId();
 
-        // Create Build step
-        CreateBuildStepRequest buildStepRequest = UserSteps.commandLine();
-        UserSteps.addBuildStep(buildTypeId, buildStepRequest);
+//      Create Build step
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
+        BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildTypeResponse build = UserSteps.getBuild(buildResponse);
-        UserSteps.assertBuildStep(
+        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildSteps.assertBuildStep(
                 build,
                 buildTypeId,
                 buildResponse.getName(),
                 projectResponse.getName()
         );
 
-        // Connect Agent
-        AgentResponse agent = UserSteps.getAgent(1);
-        UserSteps.assertAgentReady(agent);
+        // Connect an Enable Agent
+        AgentResponse agent = AgentSteps.getAgent(1);
+        AgentSteps.updateAgentEnabledStatus(agent.getId(), true, "Enable agent");
+        AgentSteps.assertAgentReady(agent);
 
         // Run Build
-        BuildResponse buildRun = UserSteps.runBuild(buildTypeId);
-        BuildResponse finishedBuild = UserSteps.waitForBuild(buildRun.getId());
+        BuildResponse buildRun = BuildSteps.runBuild(buildTypeId);
+        BuildResponse finishedBuild = BuildSteps.waitForBuild(buildRun.getId());
 
         softly.assertThat(finishedBuild.getState())
                 .isEqualTo("finished");

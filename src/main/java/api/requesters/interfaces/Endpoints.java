@@ -21,6 +21,7 @@ public enum Endpoints {
     USERS("/users", CreateUserRequest.class, UserResponse.class),
     USER("/users/{userLocator}", BaseModel.class, UserResponse.class),
     AGENT("/agents/{agentLocator}", BaseModel.class, AgentResponse.class),
+    ENABLE_AGENT("/agents/{agentLocator}/enabledInfo", BaseModel.class, BaseModel.class),
     PROJECTS("/projects", CreateProjectRequest.class, ProjectResponse.class),
     PROJECT("/projects/{projectLocator}", BaseModel.class, ProjectResponse.class),
     BUILD_TYPES("/buildTypes", CreateBuildTypeRequest.class, BuildTypeResponse.class),

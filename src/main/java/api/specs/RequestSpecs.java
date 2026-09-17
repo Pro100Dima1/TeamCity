@@ -20,6 +20,10 @@ public final class RequestSpecs {
         return defaultRequestBuilder(restBasePath());
     }
 
+    public static RequestSpecification baseSpec() {
+        return defaultRequestBuilder().build();
+    }
+
     private static RequestSpecBuilder defaultRequestBuilder(String restPath) {
         String baseUrl = Config.getProperty("apiBaseUrl");
         if (baseUrl == null || baseUrl.isBlank()) {
@@ -46,7 +50,7 @@ public final class RequestSpecs {
 
     /** Юзер из config: user.token (Bearer) или user.username/password (Basic). */
     public static RequestSpecification userSpec() {
-        String token = Config.getProperty("user.token");
+        String token = Config.getToken();
         if (token != null && !token.isBlank()) {
             return bearerSpec(token.trim());
         }
@@ -73,9 +77,8 @@ public final class RequestSpecs {
                             + "as user.token=... or env USER_TOKEN"
             );
         }
-        String value = token.startsWith("Bearer ") ? token.substring("Bearer ".length()).trim() : token.trim();
         return defaultRequestBuilder("/app/rest")
-                .addHeader("Authorization", "Bearer " + value)
+                .addHeader("Authorization", "Bearer " + token)
                 .build();
     }
 
@@ -84,4 +87,6 @@ public final class RequestSpecs {
         String encoded = Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
         return "Basic " + encoded;
     }
+
+
 }

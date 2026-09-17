@@ -15,4 +15,8 @@ public class RandomData {
                 RandomStringUtils.randomAlphanumeric(5).toLowerCase() +
                 RandomStringUtils.randomNumeric(3) + "$";
     }
+
+    public static String getId() {
+        return RandomStringUtils.randomAlphabetic(10).toLowerCase();
+    }
 }
