@@ -43,11 +43,11 @@ public class ProjectSteps {
         ).post(request);
     }
 
-    public static void createProjectDuplicateId(CreateProjectRequest request,String projectId) {
+    public static void createProjectDuplicateId(CreateProjectRequest request, String projectId) {
         new CrudRequester(
                 RequestSpecs.userSpec(),
                 Endpoints.PROJECTS,
-                ResponseSpecs.requestReturnsBadRequest(BAD_REQUEST_STATUS_TEXT,duplicateProjectIdMessage(projectId))
+                ResponseSpecs.requestReturnsBadRequest(BAD_REQUEST_STATUS_TEXT, duplicateProjectIdMessage(projectId))
         ).post(request);
     }
 

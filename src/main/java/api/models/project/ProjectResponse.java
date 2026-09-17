@@ -1,11 +1,7 @@
 package api.models.project;
 
 import api.models.BaseModel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -18,6 +14,5 @@ public class ProjectResponse extends BaseModel {
     private String name;
     private String parentProjectId;
     private String description;
-    /** Write-only locator for stubs in POST/PUT bodies. */
     private String locator;
 }

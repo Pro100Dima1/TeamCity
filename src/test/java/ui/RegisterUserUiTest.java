@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 /**
  * Регистрация без Super User:
  * Username → Password → Confirm password → Register
- *
+ * <p>
  * Предусловие: Administration → Authentication →
  * Allow user registration from the login page = ON
  * (уже включено через freeRegistrationAllowed=true)

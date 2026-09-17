@@ -1,9 +1,9 @@
 package api.steps;
 
+import api.requesters.CrudRequester;
 import api.requesters.interfaces.Endpoints;
 import api.specs.RequestSpecs;
 import api.specs.ResponseSpecs;
-import api.requesters.CrudRequester;
 
 public class AuthSteps {
     private static final String INVALID_TOKEN = "Invalid authentication request or authentication scheme is not supported\n" +

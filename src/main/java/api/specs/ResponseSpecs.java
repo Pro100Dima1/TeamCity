@@ -3,6 +3,7 @@ package api.specs;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
+
 import static org.hamcrest.Matchers.equalTo;
 
 public final class ResponseSpecs {
@@ -19,15 +20,16 @@ public final class ResponseSpecs {
                 .expectStatusCode(HttpStatus.SC_OK)
                 .build();
     }
-    public static ResponseSpecification requestReturnsNotFound(
-        String expectedStatusText,
-        String expectedMessage) {
 
-            return defaultResponseBuilder()
-                    .expectStatusCode(HttpStatus.SC_NOT_FOUND)
-                    .expectBody("errors[0].statusText", equalTo(expectedStatusText))
-                    .expectBody("errors[0].message", equalTo(expectedMessage))
-                    .build();
+    public static ResponseSpecification requestReturnsNotFound(
+            String expectedStatusText,
+            String expectedMessage) {
+
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_NOT_FOUND)
+                .expectBody("errors[0].statusText", equalTo(expectedStatusText))
+                .expectBody("errors[0].message", equalTo(expectedMessage))
+                .build();
     }
 
 

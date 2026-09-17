@@ -4,7 +4,7 @@ import api.steps.AuthSteps;
 import org.junit.jupiter.api.Test;
 
 
-public class AuthTest extends BaseTest{
+public class AuthTest extends BaseTest {
 
     @Test
     void userCanAccessProtectedEndpointWithValidToken() {
@@ -15,6 +15,7 @@ public class AuthTest extends BaseTest{
     void userCannotAccessProtectedEndpointWithInvalidToken() {
         AuthSteps.authWithInvalidToken();
     }
+
     @Test
     void userCannotAccessProtectedEndpointWithoutAuthentication() {
         AuthSteps.authWithoutToken();

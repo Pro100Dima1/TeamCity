@@ -2,8 +2,9 @@ package api.generators;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-public class RandomData {
-    private RandomData(){}
+public final class RandomData {
+    private RandomData() {
+    }
 
     public static String getUsername() {
         // TeamCity нормализует username в lowercase

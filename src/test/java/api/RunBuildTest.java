@@ -86,7 +86,7 @@ public class RunBuildTest extends BaseTest {
                 ProjectSteps.createProject(projectRequest);
         projectId = projectResponse.getId();
 
-        BuildResponse buildRun = BuildSteps.runBuildWithoutConfiguration(RandomData. getId());
+        BuildResponse buildRun = BuildSteps.runBuildWithoutConfiguration(RandomData.getId());
     }
 
     @Test

@@ -4,11 +4,7 @@ import api.generators.GeneratingRule;
 import api.models.BaseModel;
 import api.models.build_step.CreateBuildStepRequest;
 import api.models.project.ProjectResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class CreateBuildTest extends BaseTest{
+public class CreateBuildTest extends BaseTest {
     private String projectId;
 
     @AfterEach

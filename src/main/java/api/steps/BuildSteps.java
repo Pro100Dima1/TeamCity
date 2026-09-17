@@ -82,7 +82,7 @@ public class BuildSteps {
         return new ValidatedCrudRequester<BuildTypeResponse>(
                 RequestSpecs.userSpec(),
                 Endpoints.BUILD_TYPES,
-                ResponseSpecs.requestReturnsBadRequest(BAD_REQUEST_STATUS_TEXT,BLANK_BUILD_MESSAGE)
+                ResponseSpecs.requestReturnsBadRequest(BAD_REQUEST_STATUS_TEXT, BLANK_BUILD_MESSAGE)
         ).post(createBuildRequest);
     }
 

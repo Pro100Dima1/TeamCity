@@ -42,7 +42,9 @@ public class RegisterUserPage {
         registerButton.click();
     }
 
-    /** Полный сценарий: имя, пароль, подтверждение пароля. */
+    /**
+     * Полный сценарий: имя, пароль, подтверждение пароля.
+     */
     public void register(String username, String password) {
         setUsername(username);
         setPassword(password);

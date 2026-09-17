@@ -45,19 +45,10 @@ public final class ModelComparator {
         throw new RuntimeException("Field not found: " + fieldName + " in class " + obj.getClass().getName());
     }
 
-    public static class ComparisonResult {
-        private final List<Mismatch> mismatches;
-
-        public ComparisonResult(List<Mismatch> mismatches) {
-            this.mismatches = mismatches;
-        }
+    public record ComparisonResult(List<Mismatch> mismatches) {
 
         public boolean isSuccess() {
             return mismatches.isEmpty();
-        }
-
-        public List<Mismatch> getMismatches() {
-            return mismatches;
         }
 
         @Override
@@ -75,15 +66,6 @@ public final class ModelComparator {
         }
     }
 
-    public static class Mismatch {
-        public final String fieldName;
-        public final Object expected;
-        public final Object actual;
-
-        public Mismatch(String fieldName, Object expected, Object actual) {
-            this.fieldName = fieldName;
-            this.expected = expected;
-            this.actual = actual;
-        }
+    public record Mismatch(String fieldName, Object expected, Object actual) {
     }
 }

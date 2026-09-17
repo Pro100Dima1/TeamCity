@@ -6,10 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="f47b5f15-288e-4710-aab5-0e7df178695f" name="Changes" comment="Улучшения">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/api/steps/AgentSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/steps/AgentSteps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/api/CreateProjectTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/CreateProjectTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/api/RunBuildTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/RunBuildTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/generators/RandomModelGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/generators/RandomModelGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/agent/AgentResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/agent/AgentResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build/BuildResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build/BuildResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build/RunBuildRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build/RunBuildRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_step/BuildStepResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_step/BuildStepResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_step/CreateBuildStepRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_step/CreateBuildStepRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_step/Properties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_step/Properties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_step/Property.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_step/Property.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_type/BuildTypeResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_type/BuildTypeResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/build_type/CreateBuildTypeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/build_type/CreateBuildTypeRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/comparison/ModelComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/comparison/ModelComparator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/comparison/ModelComparisonConfigLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/comparison/ModelComparisonConfigLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/project/CreateProjectRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/project/CreateProjectRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/models/project/ProjectResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/models/project/ProjectResponse.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +97,8 @@
     "JUnit.RunBuildTest.userCanNotRunBuildWithoutConnectedAgent.executor": "Run",
     "JUnit.RunBuildTest.userCanRunBuildWithValidData.executor": "Run",
     "JUnit.api in TeamCity.executor": "Run",
+    "Maven.TeamCity [checkstyle:check].executor": "Run",
+    "Maven.TeamCity [spotless:apply].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -91,7 +106,7 @@
     "git-widget-placeholder": "#8 on API-tests",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/AlesiaSapezhka/IdeaProjects/teamCity",
-    "settings.editor.selected.configurable": "preferences.keymap"
+    "settings.editor.selected.configurable": "preferences.sourceCode.JAVA"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -100,7 +115,13 @@
       <recent name="C:\Users\AlesiaSapezhka\IdeaProjects\TeamCity\TC\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CreateUserTest.userCanCreateUserWithValidData">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn spotless:apply" />
+      <command value="mvn checkstyle:check" />
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.All API Tests">
     <configuration name="All API Tests" type="JUnit" factoryName="JUnit">
       <module name="TeamCity" />
       <option name="MAIN_CLASS_NAME" value="" />
@@ -271,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789660946048</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Улучшения">
+      <option name="closed" value="true" />
+      <created>1789662556189</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1789662556189</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -2,11 +2,7 @@ package api.models.build_type;
 
 import api.models.BaseModel;
 import api.models.build_step.BuildStepsResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

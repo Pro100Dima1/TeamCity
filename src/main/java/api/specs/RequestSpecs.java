@@ -48,7 +48,9 @@ public final class RequestSpecs {
         return "/app/rest";
     }
 
-    /** Юзер из config: user.token (Bearer) или user.username/password (Basic). */
+    /**
+     * Юзер из config: user.token (Bearer) или user.username/password (Basic).
+     */
     public static RequestSpecification userSpec() {
         String token = Config.getToken();
         if (token != null && !token.isBlank()) {

@@ -98,12 +98,10 @@ public class RandomModelGenerator {
 
     private static List<Object> generateRandomList(Field field) {
         Type genericType = field.getGenericType();
-        if (genericType instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) genericType;
+        if (genericType instanceof ParameterizedType pt) {
             Type actualType = pt.getActualTypeArguments()[0];
 
-            if (actualType instanceof Class<?>) {
-                Class<?> actualClass = (Class<?>) actualType;
+            if (actualType instanceof Class<?> actualClass) {
 
                 if (actualClass == String.class) {
                     return List.of(UUID.randomUUID().toString().substring(0, 5),
