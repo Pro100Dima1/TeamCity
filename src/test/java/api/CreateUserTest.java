@@ -1,5 +1,6 @@
 package api;
 
+import api.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.user.CreateUserRequest;
 import api.models.user.UserResponse;
@@ -42,7 +43,7 @@ public class CreateUserTest extends BaseTest {
         CreateUserRequest createUserRequest = BuildSteps.buildUserBlankName();
         UserSteps.createUserInvalidName(createUserRequest);
 
-        List<UserResponse> users = UserSteps.getAllUsers("user");
+        List<UserResponse> users = UserSteps.getAllUsers(JsonPaths.USERS.getPath());
         softly.assertThat(users).noneSatisfy(foundUser -> ModelAssertions.assertThatModels(createUserRequest, foundUser).match());
     }
 
@@ -52,7 +53,7 @@ public class CreateUserTest extends BaseTest {
         CreateUserRequest createUserRequest = BuildSteps.buildUserBlankPassword();
         UserSteps.createUserInvalidPassword(createUserRequest);
 
-        List<UserResponse> users = UserSteps.getAllUsers("user");
+        List<UserResponse> users = UserSteps.getAllUsers(JsonPaths.USERS.getPath());
         softly.assertThat(users).noneSatisfy(foundUser -> ModelAssertions.assertThatModels(createUserRequest, foundUser).match());
     }
 }

@@ -30,6 +30,8 @@ public class BuildSteps {
     private static final String BLANK_BUILD_MESSAGE = "When creating a build type, non empty name should be provided.";
     private static final String NOT_FOUND_STATUS_TEXT = "Responding with error, status code: 404 (Not Found).";
     private static final String BAD_REQUEST_STATUS_TEXT = "Responding with error, status code: 400 (Bad Request).";
+    private static final String NOT_EXISTING_BUILD_MESSAGE = "Invalid value of dimension 'id': 'null'. Should be a number.";
+
 
     public static CreateUserRequest buildUserValid() {
         return RandomModelGenerator.generate(CreateUserRequest.class);
@@ -109,6 +111,14 @@ public class BuildSteps {
                 RequestSpecs.userSpec(),
                 Endpoints.BUILD,
                 ResponseSpecs.requestReturnsOK()
+        ).get(Map.of("buildLocator", "id:" + buildId));
+    }
+
+    public static BuildResponse getNotExistingBuild(Integer buildId) {
+        return new ValidatedCrudRequester<BuildResponse>(
+                RequestSpecs.userSpec(),
+                Endpoints.BUILD,
+                ResponseSpecs.requestReturnsBadRequest(BAD_REQUEST_STATUS_TEXT, NOT_EXISTING_BUILD_MESSAGE)
         ).get(Map.of("buildLocator", "id:" + buildId));
     }
 

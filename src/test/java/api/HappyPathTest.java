@@ -1,35 +1,25 @@
 package api;
 
+import api.data.BuildInfo;
 import api.models.agent.AgentResponse;
 import api.models.build.BuildResponse;
 import api.models.build_step.CreateBuildStepRequest;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.comparison.ModelAssertions;
-import api.models.project.CreateProjectRequest;
-import api.models.project.ProjectResponse;
 import api.steps.AgentSteps;
 import api.steps.BuildSteps;
-import api.steps.ProjectSteps;
-import common.annotations.CleanupProject;
+import common.ProjectContext;
+import common.annotations.Project;
 import org.junit.jupiter.api.Test;
 
 
 public class HappyPathTest extends BaseTest {
-    private String projectId;
-
     @Test
-    @CleanupProject
-    void userCanCreateBuildWithValidData() {
-        // Create project
-        CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
-
-        ProjectResponse projectResponse =
-                ProjectSteps.createProject(projectRequest);
-        projectId = projectResponse.getId();
-
+    @Project
+    void userCanCreateBuildWithValidData(ProjectContext project) {
         // Create Build
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(projectId);
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
 
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
@@ -48,7 +38,7 @@ public class HappyPathTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                projectResponse.getName()
+                project.getProjectName()
         );
 
         // Connect an Enable Agent
@@ -61,10 +51,9 @@ public class HappyPathTest extends BaseTest {
         BuildResponse finishedBuild = BuildSteps.waitForBuild(buildRun.getId());
 
         softly.assertThat(finishedBuild.getState())
-                .isEqualTo("finished");
+                .isEqualTo(BuildInfo.FINISHED_STATE.getValue());
 
         softly.assertThat(finishedBuild.getStatus())
-                .isEqualTo("SUCCESS");
-
+                .isEqualTo(BuildInfo.SUCCESS_STATUS.getValue());
     }
 }

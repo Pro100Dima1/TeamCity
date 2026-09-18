@@ -1,29 +1,23 @@
 package api;
 
+import api.data.JsonPaths;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.comparison.ModelAssertions;
-import api.models.project.CreateProjectRequest;
-import api.models.project.ProjectResponse;
 import api.steps.BuildSteps;
-import api.steps.ProjectSteps;
-import common.annotations.CleanupProject;
+import common.ProjectContext;
+import common.annotations.Project;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 public class CreateBuildTest extends BaseTest {
-    private String projectId;
 
     @Test
-    @CleanupProject
-    void userCanCreateBuildWithValidData() {
-        CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
-        ProjectResponse projectResponse =
-                ProjectSteps.createProject(projectRequest);
-        projectId = projectResponse.getId();
+    @Project
+    void userCanCreateBuildWithValidData(ProjectContext project) {
 
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(projectId);
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
 
@@ -35,20 +29,15 @@ public class CreateBuildTest extends BaseTest {
     }
 
     @Test
-    @CleanupProject
-    void userCanNotCreateBuildWithInvalidData() {
-        CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
-        ProjectResponse projectResponse =
-                ProjectSteps.createProject(projectRequest);
-        projectId = projectResponse.getId();
-
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(projectId);
+    @Project
+    void userCanNotCreateBuildWithInvalidData(ProjectContext project) {
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(project.getProjectId());
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuildInvalid(buildRequest);
 
         softly.assertThat(buildResponse.getId()).isBlank();
 
-        List<BuildTypeResponse> builds = BuildSteps.getAllBuilds("builds");
+        List<BuildTypeResponse> builds = BuildSteps.getAllBuilds(JsonPaths.BUILDS.getPath());
         softly.assertThat(builds).noneSatisfy(foundBuild -> ModelAssertions.assertThatModels(buildRequest, foundBuild).match());
     }
 }

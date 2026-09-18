@@ -1,10 +1,11 @@
 package api;
 
+import api.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
-import common.annotations.CleanupProject;
+import common.annotations.Project;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,7 +14,6 @@ public class CreateProjectTest extends BaseTest {
     private String projectId;
 
     @Test
-    @CleanupProject
     void userCanCreateProjectWithValidData() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
@@ -31,12 +31,12 @@ public class CreateProjectTest extends BaseTest {
     void userCanNotCreateProjectWithBlankName() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectBlankName();
 
-        List<ProjectResponse> users = ProjectSteps.getAllProjects("project");
+        List<ProjectResponse> users = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
         softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(projectRequest, foundProject).match());
     }
 
     @Test
-    @CleanupProject
+    @Project
     void userCanNotCreateProjectWithDuplicateId() {
         CreateProjectRequest project1Request = ProjectSteps.buildProjectValid();
         ProjectSteps.createProject(project1Request);
@@ -46,7 +46,7 @@ public class CreateProjectTest extends BaseTest {
         project2Request.setId(projectId);
         ProjectSteps.createProjectDuplicateId(project2Request, projectId);
 
-        List<ProjectResponse> users = ProjectSteps.getAllProjects("project");
+        List<ProjectResponse> users = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
         softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(project2Request, foundProject).match());
     }
 }

@@ -15,6 +15,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
+        <option value="AnnotationType" />
         <option value="Class" />
       </list>
     </option>
@@ -144,25 +146,7 @@
       <envs>
         <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
       </envs>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CreateProjectTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="TeamCity" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="api.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="api" />
-      <option name="MAIN_CLASS_NAME" value="api.CreateProjectTest" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
-      <envs>
-        <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
-      </envs>
+      <dir value="$PROJECT_DIR$/src" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -227,6 +211,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.RunBuildTest" />
+      <option name="METHOD_NAME" value="userCanNotRunBuildWithoutBuildConfiguration" />
+      <option name="TEST_OBJECT" value="method" />
+      <envs>
+        <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
+      </envs>
+      <dir value="$PROJECT_DIR$/src" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <module name="TeamCity" />
       <option name="MAIN_CLASS_NAME" value="" />
@@ -244,17 +248,17 @@
       <item itemvalue="JUnit.All API Tests" />
       <item itemvalue="JUnit.CreateUserTest" />
       <item itemvalue="JUnit.HappyPathTest" />
+      <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" />
       <item itemvalue="JUnit.CreateBuildTest" />
       <item itemvalue="JUnit.RunBuildTest" />
-      <item itemvalue="JUnit.CreateProjectTest" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.RunBuildTest" />
         <item itemvalue="JUnit.HappyPathTest" />
         <item itemvalue="JUnit.CreateUserTest" />
-        <item itemvalue="JUnit.CreateProjectTest" />
         <item itemvalue="JUnit.CreateBuildTest" />
+        <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" />
       </list>
     </recent_temporary>
   </component>

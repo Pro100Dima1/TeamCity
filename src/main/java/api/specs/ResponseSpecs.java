@@ -32,7 +32,6 @@ public final class ResponseSpecs {
                 .build();
     }
 
-
     public static ResponseSpecification entityWasDeleted() {
         return ResponseSpecs.defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_NO_CONTENT)
