@@ -4,7 +4,7 @@ import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
-import org.junit.jupiter.api.AfterEach;
+import common.annotations.CleanupProject;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,16 +12,8 @@ import java.util.List;
 public class CreateProjectTest extends BaseTest {
     private String projectId;
 
-    @AfterEach
-    void cleanupCreatedProject() {
-        if (projectId == null || projectId.isBlank()) {
-            return;
-        }
-        ProjectSteps.deleteProject(projectId);
-        projectId = null;
-    }
-
     @Test
+    @CleanupProject
     void userCanCreateProjectWithValidData() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
@@ -38,21 +30,21 @@ public class CreateProjectTest extends BaseTest {
     @Test
     void userCanNotCreateProjectWithBlankName() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectBlankName();
-        ProjectSteps.createProjectBlankName(projectRequest);
 
         List<ProjectResponse> users = ProjectSteps.getAllProjects("project");
         softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(projectRequest, foundProject).match());
     }
 
     @Test
+    @CleanupProject
     void userCanNotCreateProjectWithDuplicateId() {
         CreateProjectRequest project1Request = ProjectSteps.buildProjectValid();
         ProjectSteps.createProject(project1Request);
-        String project1Id = project1Request.getId();
+        projectId = project1Request.getId();
 
         CreateProjectRequest project2Request = ProjectSteps.buildProjectValid();
-        project2Request.setId(project1Id);
-        ProjectSteps.createProjectDuplicateId(project2Request, project1Id);
+        project2Request.setId(projectId);
+        ProjectSteps.createProjectDuplicateId(project2Request, projectId);
 
         List<ProjectResponse> users = ProjectSteps.getAllProjects("project");
         softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(project2Request, foundProject).match());

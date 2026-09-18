@@ -11,23 +11,15 @@ import api.models.project.ProjectResponse;
 import api.steps.AgentSteps;
 import api.steps.BuildSteps;
 import api.steps.ProjectSteps;
-import org.junit.jupiter.api.AfterEach;
+import common.annotations.CleanupProject;
 import org.junit.jupiter.api.Test;
 
 
 public class HappyPathTest extends BaseTest {
     private String projectId;
 
-    @AfterEach
-    void cleanupCreatedProject() {
-        if (projectId == null || projectId.isBlank()) {
-            return;
-        }
-        ProjectSteps.deleteProject(projectId);
-        projectId = null;
-    }
-
     @Test
+    @CleanupProject
     void userCanCreateBuildWithValidData() {
         // Create project
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();

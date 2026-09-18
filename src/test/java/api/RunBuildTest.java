@@ -12,7 +12,7 @@ import api.models.project.ProjectResponse;
 import api.steps.AgentSteps;
 import api.steps.BuildSteps;
 import api.steps.ProjectSteps;
-import org.junit.jupiter.api.AfterEach;
+import common.annotations.CleanupProject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,16 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RunBuildTest extends BaseTest {
     private String projectId;
 
-    @AfterEach
-    void cleanupCreatedProject() {
-        if (projectId == null || projectId.isBlank()) {
-            return;
-        }
-        ProjectSteps.deleteProject(projectId);
-        projectId = null;
-    }
-
     @Test
+    @CleanupProject
     void userCanRunBuildWithValidData() {
         // Create project
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
@@ -80,6 +72,7 @@ public class RunBuildTest extends BaseTest {
     }
 
     @Test
+    @CleanupProject
     void userCanNotRunBuildWithoutBuildConfiguration() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
@@ -90,6 +83,7 @@ public class RunBuildTest extends BaseTest {
     }
 
     @Test
+    @CleanupProject
     void userCanNotRunBuildWithoutConnectedAgent() {
         // Create project
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();

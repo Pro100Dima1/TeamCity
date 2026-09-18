@@ -7,7 +7,7 @@ import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.BuildSteps;
 import api.steps.ProjectSteps;
-import org.junit.jupiter.api.AfterEach;
+import common.annotations.CleanupProject;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,16 +15,8 @@ import java.util.List;
 public class CreateBuildTest extends BaseTest {
     private String projectId;
 
-    @AfterEach
-    void cleanupCreatedProject() {
-        if (projectId == null || projectId.isBlank()) {
-            return;
-        }
-        ProjectSteps.deleteProject(projectId);
-        projectId = null;
-    }
-
     @Test
+    @CleanupProject
     void userCanCreateBuildWithValidData() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
@@ -43,6 +35,7 @@ public class CreateBuildTest extends BaseTest {
     }
 
     @Test
+    @CleanupProject
     void userCanNotCreateBuildWithInvalidData() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
