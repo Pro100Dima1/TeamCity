@@ -20,6 +20,7 @@ import lombok.Getter;
 public enum Endpoints {
     USERS("/users", CreateUserRequest.class, UserResponse.class),
     USER("/users/{userLocator}", BaseModel.class, UserResponse.class),
+    CURRENT_USER("/users/current", BaseModel.class, UserResponse.class),
     AGENT("/agents/{agentLocator}", BaseModel.class, AgentResponse.class),
     ENABLE_AGENT("/agents/{agentLocator}/enabledInfo", BaseModel.class, BaseModel.class),
     PROJECTS("/projects", CreateProjectRequest.class, ProjectResponse.class),

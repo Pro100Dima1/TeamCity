@@ -5,7 +5,6 @@ import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
-import common.annotations.Project;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,6 +24,8 @@ public class CreateProjectTest extends BaseTest {
 
         ProjectResponse project = ProjectSteps.getProject(projectRequest);
         ModelAssertions.assertThatModels(projectRequest, project).match();
+
+        ProjectSteps.deleteProject(projectId);
     }
 
     @Test
@@ -36,7 +37,6 @@ public class CreateProjectTest extends BaseTest {
     }
 
     @Test
-    @Project
     void userCanNotCreateProjectWithDuplicateId() {
         CreateProjectRequest project1Request = ProjectSteps.buildProjectValid();
         ProjectSteps.createProject(project1Request);
@@ -48,5 +48,7 @@ public class CreateProjectTest extends BaseTest {
 
         List<ProjectResponse> users = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
         softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(project2Request, foundProject).match());
+
+        ProjectSteps.deleteProject(projectId);
     }
 }

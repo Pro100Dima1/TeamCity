@@ -42,4 +42,12 @@ public final class Config {
 
         return token;
     }
+
+    public static String getUsername() {
+        return INSTANCE.properties.getProperty("username");
+    }
+
+    public static String getPassword() {
+        return INSTANCE.properties.getProperty("password");
+    }
 }

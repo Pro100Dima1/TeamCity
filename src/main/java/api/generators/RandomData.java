@@ -20,4 +20,9 @@ public final class RandomData {
     public static String getId() {
         return RandomStringUtils.randomAlphabetic(10).toLowerCase();
     }
+
+    public static String getComment() {
+        return RandomStringUtils.randomAlphanumeric(10).toUpperCase() +
+                RandomStringUtils.randomAlphanumeric(15).toLowerCase();
+    }
 }

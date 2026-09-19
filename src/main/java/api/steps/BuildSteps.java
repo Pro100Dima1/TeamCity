@@ -1,5 +1,7 @@
 package api.steps;
 
+import api.generators.BuildCommands;
+import api.generators.CommandLineCommand;
 import api.generators.RandomData;
 import api.generators.RandomModelGenerator;
 import api.models.build.BuildResponse;
@@ -148,18 +150,20 @@ public class BuildSteps {
     }
 
     public static CreateBuildStepRequest commandLine() {
-        CreateBuildStepRequest request = new CreateBuildStepRequest();
+        CreateBuildStepRequest request =
+                RandomModelGenerator.generate(CreateBuildStepRequest.class);
 
-        request.setName("Run command");
         request.setType("simpleRunner");
+
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
 
         Property executable = new Property();
         executable.setName("command.executable");
-        executable.setValue("echo");
+        executable.setValue(command.executable());
 
         Property parameters = new Property();
         parameters.setName("command.parameters");
-        parameters.setValue("Hello TeamCity");
+        parameters.setValue(command.parameters());
 
         Properties properties = new Properties();
         properties.setProperty(List.of(executable, parameters));
@@ -196,7 +200,8 @@ public class BuildSteps {
             BuildTypeResponse actual,
             String expectedBuildTypeId,
             String expectedBuildTypeName,
-            String expectedProjectName
+            String expectedProjectName,
+            CreateBuildStepRequest stepRequest
     ) {
         assertAll(
                 () -> assertEquals(expectedBuildTypeId, actual.getId()),
@@ -207,29 +212,31 @@ public class BuildSteps {
                 () -> assertEquals(1, actual.getSteps().getStep().size())
         );
 
-        BuildStepResponse step = actual.getSteps().getStep().getFirst();
+        BuildStepResponse actualStep = actual.getSteps().getStep().getFirst();
 
         assertAll(
-                () -> assertEquals("Run command", step.getName()),
-                () -> assertEquals("simpleRunner", step.getType())
+                () -> assertEquals(stepRequest.getName(), actualStep.getName()),
+                () -> assertEquals(stepRequest.getType(), actualStep.getType())
         );
 
-        Property executable = step.getProperties().getProperty().stream()
-                .filter(p -> "command.executable".equals(p.getName()))
-                .findFirst()
-                .orElseThrow(() ->
-                        new AssertionError("Property 'command.executable' not found"));
+        for (Property expectedProperty : stepRequest.getProperties().getProperty()) {
 
-        Property parameters = step.getProperties().getProperty().stream()
-                .filter(p -> "command.parameters".equals(p.getName()))
-                .findFirst()
-                .orElseThrow(() ->
-                        new AssertionError("Property 'command.parameters' not found"));
+            Property actualProperty = actualStep.getProperties().getProperty().stream()
+                    .filter(property ->
+                            expectedProperty.getName().equals(property.getName()))
+                    .findFirst()
+                    .orElseThrow(() ->
+                            new AssertionError(
+                                    "Property '%s' not found"
+                                            .formatted(expectedProperty.getName())
+                            ));
 
-        assertAll(
-                () -> assertEquals("echo", executable.getValue()),
-                () -> assertEquals("Hello TeamCity", parameters.getValue())
-        );
+            assertEquals(
+                    expectedProperty.getValue(),
+                    actualProperty.getValue(),
+                    "Wrong value for property: " + expectedProperty.getName()
+            );
+        }
     }
 
     private static RunBuildRequest createRunBuildRequest(String buildTypeId) {

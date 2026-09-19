@@ -2,15 +2,14 @@ package api;
 
 import api.data.BuildInfo;
 import api.generators.RandomData;
-import api.models.agent.AgentResponse;
 import api.models.build.BuildResponse;
 import api.models.build_step.CreateBuildStepRequest;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.comparison.ModelAssertions;
-import api.steps.AgentSteps;
 import api.steps.BuildSteps;
 import common.ProjectContext;
+import common.annotations.EnableAgent;
 import common.annotations.Project;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RunBuildTest extends BaseTest {
     @Test
     @Project
+    @EnableAgent(enabled = true)
     void userCanRunBuildWithValidData(ProjectContext project) {
         // Create Build
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
@@ -40,14 +40,9 @@ public class RunBuildTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                project.getProjectName()
+                project.getProjectName(),
+                buildStepRequest
         );
-
-        // Connect Agent
-        AgentResponse agent = AgentSteps.getAgent();
-        // Enable agent
-        AgentSteps.updateAgentEnabledStatus(agent.getId(), true, "Enable agent");
-        AgentSteps.assertAgentReady(agent);
 
         // Run Build
         BuildResponse buildRun = BuildSteps.runBuild(buildTypeId);
@@ -65,11 +60,15 @@ public class RunBuildTest extends BaseTest {
     @Project
     void userCanNotRunBuildWithoutBuildConfiguration() {
         BuildResponse buildRun = BuildSteps.runBuildWithoutConfiguration(RandomData.getId());
-        BuildSteps.getNotExistingBuild(buildRun.getId());
+        BuildResponse build = BuildSteps.getNotExistingBuild(buildRun.getId());
+
+        softly.assertThat(build.getId()).isNull();
+
     }
 
     @Test
     @Project
+    @EnableAgent(enabled = false)
     void userCanNotRunBuildWithoutConnectedAgent(ProjectContext project) {
         // Create Build
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
@@ -91,12 +90,9 @@ public class RunBuildTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                project.getProjectName()
+                project.getProjectName(),
+                buildStepRequest
         );
-
-        // Disable agent
-        AgentResponse agent = AgentSteps.getAgent();
-        AgentSteps.updateAgentEnabledStatus(agent.getId(), false, "Disable agent");
 
         // Run Build
         BuildResponse buildRun = BuildSteps.runBuild(buildTypeId);

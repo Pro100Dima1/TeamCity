@@ -1,15 +1,14 @@
 package api;
 
 import api.data.BuildInfo;
-import api.models.agent.AgentResponse;
 import api.models.build.BuildResponse;
 import api.models.build_step.CreateBuildStepRequest;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.comparison.ModelAssertions;
-import api.steps.AgentSteps;
 import api.steps.BuildSteps;
 import common.ProjectContext;
+import common.annotations.EnableAgent;
 import common.annotations.Project;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 public class HappyPathTest extends BaseTest {
     @Test
     @Project
+    @EnableAgent(enabled = true)
     void userCanCreateBuildWithValidData(ProjectContext project) {
         // Create Build
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
@@ -38,13 +38,9 @@ public class HappyPathTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                project.getProjectName()
+                project.getProjectName(),
+                buildStepRequest
         );
-
-        // Connect an Enable Agent
-        AgentResponse agent = AgentSteps.getAgent();
-        AgentSteps.updateAgentEnabledStatus(agent.getId(), true, "Enable agent");
-        AgentSteps.assertAgentReady(agent);
 
         // Run Build
         BuildResponse buildRun = BuildSteps.runBuild(buildTypeId);

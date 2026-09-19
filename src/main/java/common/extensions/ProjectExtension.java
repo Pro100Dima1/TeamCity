@@ -7,7 +7,7 @@ import common.ProjectContext;
 import org.junit.jupiter.api.extension.*;
 
 public class ProjectExtension
-        implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
+        implements BeforeEachCallback,AfterEachCallback, ParameterResolver {
 
     private static final String PROJECT_CONTEXT = "projectContext";
 

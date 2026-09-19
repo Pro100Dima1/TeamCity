@@ -51,6 +51,14 @@ public class UserSteps {
         ).get(Map.of("userLocator", "username:" + request.getUsername()));
     }
 
+    public static UserResponse getCurrentUser() {
+        return new ValidatedCrudRequester<UserResponse>(
+                RequestSpecs.userSpec(),
+                Endpoints.CURRENT_USER,
+                ResponseSpecs.requestReturnsOK()
+        ).get();
+    }
+
     public static List<UserResponse> getAllUsers(String jsonPath) {
         return new ValidatedCrudRequester<UserResponse>(
                 RequestSpecs.userSpec(),

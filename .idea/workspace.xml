@@ -5,7 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f47b5f15-288e-4710-aab5-0e7df178695f" name="Changes" comment="deleted outdated files">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/configs/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/generators/RandomData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/requesters/interfaces/Endpoints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/steps/BuildSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/steps/BuildSteps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/api/steps/UserSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/api/steps/UserSteps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/common/extensions/ProjectExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/extensions/ProjectExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/api/AuthTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/AuthTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/api/CreateProjectTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/CreateProjectTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/HappyPathTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/api/RunBuildTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/api/RunBuildTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,52 +71,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.All API Tests.executor": "Run",
-    "JUnit.AuthTest.executor": "Run",
-    "JUnit.AuthTest.userCanAccessProtectedEndpointWithValidToken.executor": "Run",
-    "JUnit.AuthTest.userCannotAccessProtectedEndpointWithInvalidToken.executor": "Run",
-    "JUnit.AuthTest.userCannotAccessProtectedEndpointWithoutAuthentication.executor": "Run",
-    "JUnit.CreateAgentTest.testCreateAgent.executor": "Run",
-    "JUnit.CreateAndRunBuildTest.executor": "Run",
-    "JUnit.CreateAndRunBuildTest.userCanCreateBuildWithValidData.executor": "Run",
-    "JUnit.CreateBuildTest.executor": "Run",
-    "JUnit.CreateBuildTest.userCanCreateBuildWithValidData.executor": "Run",
-    "JUnit.CreateBuildTest.userCanNotCreateBuildWithInvalidData.executor": "Run",
-    "JUnit.CreateProjectTest.executor": "Run",
-    "JUnit.CreateProjectTest.superUserCanCreateProjectWithValidData.executor": "Run",
-    "JUnit.CreateProjectTest.userCanCreateProjectWithLongProjectName.executor": "Run",
-    "JUnit.CreateProjectTest.userCanCreateProjectWithValidData.executor": "Run",
-    "JUnit.CreateProjectTest.userCanNotCreateProjectWithBlankName.executor": "Run",
-    "JUnit.CreateProjectTest.userCanNotCreateProjectWithDuplicateId.executor": "Run",
-    "JUnit.CreateProjectTest.userCanNotCreateProjectWithLongProjectName.executor": "Run",
-    "JUnit.CreateUserTest.adminCanCreateUserWithValidData.executor": "Run",
-    "JUnit.CreateUserTest.executor": "Run",
-    "JUnit.CreateUserTest.superUserCanCreateUserWithValidData.executor": "Run",
-    "JUnit.CreateUserTest.superUserCanNotCreateUserWithBlankName.executor": "Run",
-    "JUnit.CreateUserTest.superUserCanNotCreateUserWithBlankPassword.executor": "Run",
-    "JUnit.CreateUserTest.userCanCreateUserWithValidData.executor": "Run",
-    "JUnit.HappyPathTest.executor": "Run",
-    "JUnit.HappyPathTest.userCanCreateBuildWithValidData.executor": "Run",
-    "JUnit.RunBuildTest.executor": "Run",
-    "JUnit.RunBuildTest.userCanCreateBuildWithValidData.executor": "Run",
-    "JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration.executor": "Run",
-    "JUnit.RunBuildTest.userCanNotRunBuildWithoutConnectedAgent.executor": "Run",
-    "JUnit.RunBuildTest.userCanRunBuildWithValidData.executor": "Run",
-    "JUnit.api in TeamCity.executor": "Run",
-    "Maven.TeamCity [checkstyle:check].executor": "Run",
-    "Maven.TeamCity [spotless:apply].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#9 on API-tests",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/AlesiaSapezhka/IdeaProjects/teamCity",
-    "settings.editor.selected.configurable": "preferences.sourceCode.JAVA"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.All API Tests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthTest.userCanAccessProtectedEndpointWithValidToken.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthTest.userCannotAccessProtectedEndpointWithInvalidToken.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthTest.userCannotAccessProtectedEndpointWithoutAuthentication.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateAgentTest.testCreateAgent.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateAndRunBuildTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateAndRunBuildTest.userCanCreateBuildWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateBuildTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateBuildTest.userCanCreateBuildWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateBuildTest.userCanNotCreateBuildWithInvalidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.superUserCanCreateProjectWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.userCanCreateProjectWithLongProjectName.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.userCanCreateProjectWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.userCanNotCreateProjectWithBlankName.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.userCanNotCreateProjectWithDuplicateId.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateProjectTest.userCanNotCreateProjectWithLongProjectName.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateUserTest.adminCanCreateUserWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateUserTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateUserTest.superUserCanCreateUserWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateUserTest.superUserCanNotCreateUserWithBlankName.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateUserTest.superUserCanNotCreateUserWithBlankPassword.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CreateUserTest.userCanCreateUserWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.HappyPathTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.HappyPathTest.userCanCreateBuildWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunBuildTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunBuildTest.userCanCreateBuildWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunBuildTest.userCanNotRunBuildWithoutConnectedAgent.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunBuildTest.userCanRunBuildWithValidData.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.api in TeamCity.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.TeamCity [checkstyle:check].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.TeamCity [spotless:apply].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#9 on API-tests&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/AlesiaSapezhka/IdeaProjects/teamCity&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.JAVA&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\AlesiaSapezhka\IdeaProjects\TeamCity" />
@@ -141,6 +153,26 @@
       </extension>
       <option name="PACKAGE_NAME" value="api" />
       <option name="MAIN_CLASS_NAME" value="api.CreateBuildTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <envs>
+        <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
+      </envs>
+      <dir value="$PROJECT_DIR$/src" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CreateProjectTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TeamCity" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="api" />
+      <option name="MAIN_CLASS_NAME" value="api.CreateProjectTest" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <envs>
@@ -211,26 +243,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="TeamCity" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="api.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="api" />
-      <option name="MAIN_CLASS_NAME" value="api.RunBuildTest" />
-      <option name="METHOD_NAME" value="userCanNotRunBuildWithoutBuildConfiguration" />
-      <option name="TEST_OBJECT" value="method" />
-      <envs>
-        <env name="TEAMCITY_TOKEN" value="eyJ0eXAiOiAiVENWMiJ9.SlV4eXo5TERoYzc3aFN6Ym5CLUpKaDQ4N0ZG.YjNmYjhkODItNGM1Mi00ZTllLTg5MzItOTAzYzRlZTZhYjNh" />
-      </envs>
-      <dir value="$PROJECT_DIR$/src" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <module name="TeamCity" />
       <option name="MAIN_CLASS_NAME" value="" />
@@ -246,9 +258,9 @@
     </configuration>
     <list>
       <item itemvalue="JUnit.All API Tests" />
+      <item itemvalue="JUnit.CreateProjectTest" />
       <item itemvalue="JUnit.CreateUserTest" />
       <item itemvalue="JUnit.HappyPathTest" />
-      <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" />
       <item itemvalue="JUnit.CreateBuildTest" />
       <item itemvalue="JUnit.RunBuildTest" />
     </list>
@@ -257,8 +269,8 @@
         <item itemvalue="JUnit.RunBuildTest" />
         <item itemvalue="JUnit.HappyPathTest" />
         <item itemvalue="JUnit.CreateUserTest" />
+        <item itemvalue="JUnit.CreateProjectTest" />
         <item itemvalue="JUnit.CreateBuildTest" />
-        <item itemvalue="JUnit.RunBuildTest.userCanNotRunBuildWithoutBuildConfiguration" />
       </list>
     </recent_temporary>
   </component>
