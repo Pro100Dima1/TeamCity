@@ -5,10 +5,12 @@ import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
+import common.annotations.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+@User
 public class CreateProjectTest extends BaseTest {
     private String projectId;
 

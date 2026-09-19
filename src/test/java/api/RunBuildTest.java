@@ -11,17 +11,25 @@ import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.EnableAgent;
 import common.annotations.Project;
+import common.annotations.User;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@User
 public class RunBuildTest extends BaseTest {
     @Test
     @Project
     @EnableAgent(enabled = true)
+    @ResourceLock(
+            value = "teamcity-agent",
+            mode = ResourceAccessMode.READ
+    )
     void userCanRunBuildWithValidData(ProjectContext project) {
         // Create Build
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
 
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
@@ -40,7 +48,7 @@ public class RunBuildTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                project.getProjectName(),
+                project.projectName(),
                 buildStepRequest
         );
 
@@ -69,9 +77,13 @@ public class RunBuildTest extends BaseTest {
     @Test
     @Project
     @EnableAgent(enabled = false)
+    @ResourceLock(
+            value = "teamcity-agent",
+            mode = ResourceAccessMode.READ_WRITE
+    )
     void userCanNotRunBuildWithoutConnectedAgent(ProjectContext project) {
         // Create Build
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
 
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
@@ -90,7 +102,7 @@ public class RunBuildTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                project.getProjectName(),
+                project.projectName(),
                 buildStepRequest
         );
 

@@ -5,9 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class BuildCommands {
 
-    private BuildCommands() {
-    }
-
     private static final List<CommandLineCommand> COMMAND_LINE_COMMANDS = List.of(
             new CommandLineCommand("echo", "Hello TeamCity"),
             new CommandLineCommand("echo", "Build started"),
@@ -18,6 +15,9 @@ public final class BuildCommands {
             new CommandLineCommand("echo", "TeamCity Build Step"),
             new CommandLineCommand("echo", "Automation test")
     );
+
+    private BuildCommands() {
+    }
 
     public static CommandLineCommand randomCommandLineCommand() {
         return COMMAND_LINE_COMMANDS.get(

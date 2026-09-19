@@ -2,7 +2,6 @@ package api.steps;
 
 import api.generators.BuildCommands;
 import api.generators.CommandLineCommand;
-import api.generators.RandomData;
 import api.generators.RandomModelGenerator;
 import api.models.build.BuildResponse;
 import api.models.build.RunBuildRequest;
@@ -13,7 +12,6 @@ import api.models.build_step.Property;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.project.ProjectResponse;
-import api.models.user.CreateUserRequest;
 import api.requesters.CrudRequester;
 import api.requesters.ValidatedCrudRequester;
 import api.requesters.interfaces.Endpoints;
@@ -33,25 +31,6 @@ public class BuildSteps {
     private static final String NOT_FOUND_STATUS_TEXT = "Responding with error, status code: 404 (Not Found).";
     private static final String BAD_REQUEST_STATUS_TEXT = "Responding with error, status code: 400 (Bad Request).";
     private static final String NOT_EXISTING_BUILD_MESSAGE = "Invalid value of dimension 'id': 'null'. Should be a number.";
-
-
-    public static CreateUserRequest buildUserValid() {
-        return RandomModelGenerator.generate(CreateUserRequest.class);
-    }
-
-    public static CreateUserRequest buildUserBlankName() {
-        return CreateUserRequest.builder()
-                .username("")
-                .password(RandomData.getPassword())
-                .build();
-    }
-
-    public static CreateUserRequest buildUserBlankPassword() {
-        return CreateUserRequest.builder()
-                .username(RandomData.getUsername())
-                .password("")
-                .build();
-    }
 
     public static CreateBuildTypeRequest buildValid(String projectId) {
         CreateBuildTypeRequest request =

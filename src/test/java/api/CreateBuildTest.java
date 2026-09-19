@@ -7,17 +7,19 @@ import api.models.comparison.ModelAssertions;
 import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.Project;
+import common.annotations.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+@User
 public class CreateBuildTest extends BaseTest {
 
     @Test
     @Project
+    @User
     void userCanCreateBuildWithValidData(ProjectContext project) {
-
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
 
@@ -30,8 +32,9 @@ public class CreateBuildTest extends BaseTest {
 
     @Test
     @Project
+    @User
     void userCanNotCreateBuildWithInvalidData(ProjectContext project) {
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(project.getProjectId());
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(project.projectId());
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuildInvalid(buildRequest);
 

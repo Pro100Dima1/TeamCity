@@ -27,7 +27,7 @@ public class EnableAgentExtension implements BeforeEachCallback {
 
         AgentResponse agentAfterChangeStatus = AgentSteps.getAgent();
         if (enabled) {
-            AgentSteps.assertAgentReady(agentAfterChangeStatus );
+            AgentSteps.assertAgentReady(agentAfterChangeStatus);
         }
     }
 }

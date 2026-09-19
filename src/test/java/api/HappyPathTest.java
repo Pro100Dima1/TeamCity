@@ -10,16 +10,23 @@ import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.EnableAgent;
 import common.annotations.Project;
+import common.annotations.User;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
 
-
+@User
 public class HappyPathTest extends BaseTest {
     @Test
     @Project
     @EnableAgent(enabled = true)
+    @ResourceLock(
+            value = "teamcity-agent",
+            mode = ResourceAccessMode.READ
+    )
     void userCanCreateBuildWithValidData(ProjectContext project) {
         // Create Build
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.getProjectId());
+        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
 
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
@@ -38,7 +45,7 @@ public class HappyPathTest extends BaseTest {
                 build,
                 buildTypeId,
                 buildResponse.getName(),
-                project.getProjectName(),
+                project.projectName(),
                 buildStepRequest
         );
 

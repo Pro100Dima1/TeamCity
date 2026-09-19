@@ -10,8 +10,8 @@ import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
-import api.models.user.CreateUserRequest;
-import api.models.user.UserResponse;
+import api.models.server.AuthSettingsRequest;
+import api.models.user.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -20,7 +20,10 @@ import lombok.Getter;
 public enum Endpoints {
     USERS("/users", CreateUserRequest.class, UserResponse.class),
     USER("/users/{userLocator}", BaseModel.class, UserResponse.class),
+    USER_TOKENS("/users/{userLocator}/tokens", CreateTokenRequest.class, TokenResponse.class),
+    USER_ROLE("/users/{userLocator}/roles/{roleId}/{scope}", BaseModel.class, Role.class),
     CURRENT_USER("/users/current", BaseModel.class, UserResponse.class),
+    AUTH_SETTINGS("/server/authSettings", AuthSettingsRequest.class, BaseModel.class),
     AGENT("/agents/{agentLocator}", BaseModel.class, AgentResponse.class),
     ENABLE_AGENT("/agents/{agentLocator}/enabledInfo", BaseModel.class, BaseModel.class),
     PROJECTS("/projects", CreateProjectRequest.class, ProjectResponse.class),

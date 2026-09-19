@@ -31,23 +31,4 @@ public final class Config {
         }
         return INSTANCE.properties.getProperty(key);
     }
-
-    public static String getToken() {
-        String token = System.getenv("TEAMCITY_TOKEN");
-
-        if (token == null || token.isBlank()) {
-            throw new IllegalStateException(
-                    "Environment variable TEAMCITY_TOKEN is not set");
-        }
-
-        return token;
-    }
-
-    public static String getUsername() {
-        return INSTANCE.properties.getProperty("username");
-    }
-
-    public static String getPassword() {
-        return INSTANCE.properties.getProperty("password");
-    }
 }

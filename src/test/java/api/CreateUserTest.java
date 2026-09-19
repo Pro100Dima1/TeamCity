@@ -4,13 +4,11 @@ import api.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.user.CreateUserRequest;
 import api.models.user.UserResponse;
-import api.steps.BuildSteps;
 import api.steps.UserSteps;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
 
 public class CreateUserTest extends BaseTest {
 
@@ -21,13 +19,17 @@ public class CreateUserTest extends BaseTest {
         if (createdUsername == null || createdUsername.isBlank()) {
             return;
         }
-        UserSteps.deleteUser(createdUsername);
+        try {
+            UserSteps.deleteUser(createdUsername);
+        } catch (AssertionError | RuntimeException ignored) {
+            // user may not exist (negative tests)
+        }
         createdUsername = null;
     }
 
     @Test
     void userCanCreateUserWithValidData() {
-        CreateUserRequest createUserRequest = BuildSteps.buildUserValid();
+        CreateUserRequest createUserRequest = UserSteps.buildUserValid();
         UserResponse createUserResponse = UserSteps.createUserValid(createUserRequest);
         createdUsername = createUserResponse.getUsername();
 
@@ -40,20 +42,23 @@ public class CreateUserTest extends BaseTest {
 
     @Test
     void userCanNotCreateUserWithBlankName() {
-        CreateUserRequest createUserRequest = BuildSteps.buildUserBlankName();
+        CreateUserRequest createUserRequest = UserSteps.buildUserBlankName();
         UserSteps.createUserInvalidName(createUserRequest);
 
         List<UserResponse> users = UserSteps.getAllUsers(JsonPaths.USERS.getPath());
-        softly.assertThat(users).noneSatisfy(foundUser -> ModelAssertions.assertThatModels(createUserRequest, foundUser).match());
+        softly.assertThat(users).noneSatisfy(foundUser ->
+                ModelAssertions.assertThatModels(createUserRequest, foundUser).match());
     }
 
     // Баг, юзер успешно создался с пустым паролем
     @Test
     void userCanNotCreateUserWithBlankPassword() {
-        CreateUserRequest createUserRequest = BuildSteps.buildUserBlankPassword();
+        CreateUserRequest createUserRequest = UserSteps.buildUserBlankPassword();
+        createdUsername = createUserRequest.getUsername();
         UserSteps.createUserInvalidPassword(createUserRequest);
 
         List<UserResponse> users = UserSteps.getAllUsers(JsonPaths.USERS.getPath());
-        softly.assertThat(users).noneSatisfy(foundUser -> ModelAssertions.assertThatModels(createUserRequest, foundUser).match());
+        softly.assertThat(users).noneSatisfy(foundUser ->
+                ModelAssertions.assertThatModels(createUserRequest, foundUser).match());
     }
 }
