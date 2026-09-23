@@ -128,13 +128,11 @@ public class BuildSteps {
                 );
     }
 
-    public static CreateBuildStepRequest commandLine() {
+    public static CreateBuildStepRequest commandLine(CommandLineCommand command) {
         CreateBuildStepRequest request =
                 RandomModelGenerator.generate(CreateBuildStepRequest.class);
 
         request.setType("simpleRunner");
-
-        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
 
         Property executable = new Property();
         executable.setName("command.executable");
@@ -166,13 +164,47 @@ public class BuildSteps {
         );
     }
 
-    public static BuildTypeResponse getBuild(BuildTypeResponse request) {
+    public static BuildTypeResponse getBuild(String buildId) {
 
         return new ValidatedCrudRequester<BuildTypeResponse>(
                 RequestSpecs.userSpec(),
                 Endpoints.BUILD_TYPE,
                 ResponseSpecs.requestReturnsOK()
-        ).get(Map.of("btLocator", "id:" + request.getId()));
+        ).get(Map.of("btLocator", "id:" + buildId));
+    }
+
+    /** Resolve build type created via UI (ID is auto-generated; lookup by name + project). */
+    public static BuildTypeResponse getBuildByName(String projectId, String buildName) {
+        String locator = "name:" + buildName + ",project:(id:" + projectId + ")";
+        return new ValidatedCrudRequester<BuildTypeResponse>(
+                RequestSpecs.userSpec(),
+                Endpoints.BUILD_TYPE,
+                ResponseSpecs.requestReturnsOK()
+        ).get(Map.of("btLocator", locator));
+    }
+
+    /**
+     * Build step as created in UI (Command Line → Custom script),
+     * so API assertions can match {@code script.content}.
+     */
+    public static CreateBuildStepRequest customScriptStep(String stepId, String stepName, String script) {
+        Property scriptContent = new Property();
+        scriptContent.setName("script.content");
+        scriptContent.setValue(script);
+
+        Property useCustomScript = new Property();
+        useCustomScript.setName("use.custom.script");
+        useCustomScript.setValue("true");
+
+        Properties properties = new Properties();
+        properties.setProperty(List.of(scriptContent, useCustomScript));
+
+        return CreateBuildStepRequest.builder()
+                .id(stepId)
+                .name(stepName)
+                .type("simpleRunner")
+                .properties(properties)
+                .build();
     }
 
     public static void assertBuildStep(
@@ -218,7 +250,7 @@ public class BuildSteps {
         }
     }
 
-    private static RunBuildRequest createRunBuildRequest(String buildTypeId) {
+    public static RunBuildRequest createRunBuildRequest(String buildTypeId) {
         return RunBuildRequest.builder()
                 .buildType(
                         RunBuildRequest.BuildTypeReference.builder()

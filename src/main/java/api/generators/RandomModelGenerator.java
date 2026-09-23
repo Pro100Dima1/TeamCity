@@ -59,6 +59,13 @@ public class RandomModelGenerator {
         if (type.equals(String.class) && fieldName.contains("password")) {
             return RandomData.getPassword();
         }
+        // TeamCity entity IDs must start with a latin letter
+        if (type.equals(String.class) && fieldName.equals("id")) {
+            return RandomData.getId();
+        }
+        if (type.equals(String.class) && fieldName.equals("name")) {
+            return RandomData.getBuildName();
+        }
 
         // Базовые типы
         if (type.equals(String.class)) {

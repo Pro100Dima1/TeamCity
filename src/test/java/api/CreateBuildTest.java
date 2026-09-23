@@ -7,17 +7,17 @@ import api.models.comparison.ModelAssertions;
 import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.Project;
-import common.annotations.User;
+import common.annotations.CreateAndDeleteUser;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@User
+@CreateAndDeleteUser
 public class CreateBuildTest extends BaseTest {
 
     @Test
     @Project
-    @User
+    @CreateAndDeleteUser
     void userCanCreateBuildWithValidData(ProjectContext project) {
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
         BuildTypeResponse buildResponse =
@@ -26,13 +26,13 @@ public class CreateBuildTest extends BaseTest {
         ModelAssertions.assertThatModels(buildRequest, buildResponse).match();
         softly.assertThat(buildResponse.getId()).isNotBlank();
 
-        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildTypeResponse build = BuildSteps.getBuild(buildResponse.getId());
         ModelAssertions.assertThatModels(buildRequest, build).match();
     }
 
     @Test
     @Project
-    @User
+    @CreateAndDeleteUser
     void userCanNotCreateBuildWithInvalidData(ProjectContext project) {
         CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(project.projectId());
         BuildTypeResponse buildResponse =

@@ -25,4 +25,8 @@ public final class RandomData {
         return RandomStringUtils.randomAlphanumeric(10).toUpperCase() +
                 RandomStringUtils.randomAlphanumeric(15).toLowerCase();
     }
+
+    public static String getBuildName() {
+        return RandomStringUtils.randomAlphabetic(10);
+    }
 }

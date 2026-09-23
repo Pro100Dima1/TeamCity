@@ -9,13 +9,13 @@ import api.steps.UserSteps;
 import common.UserContext;
 import org.junit.jupiter.api.extension.*;
 
-public class UserExtension
+public class CreateAndDeleteUserExtension
         implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     private static final String USER_CONTEXT = "userContext";
 
     private static final ExtensionContext.Namespace NAMESPACE =
-            ExtensionContext.Namespace.create(UserExtension.class);
+            ExtensionContext.Namespace.create(CreateAndDeleteUserExtension.class);
 
     @Override
     public void beforeEach(ExtensionContext context) {

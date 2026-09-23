@@ -23,7 +23,7 @@ public class ProjectSteps {
 
     public static CreateProjectRequest buildProjectBlankName() {
         return CreateProjectRequest.builder()
-                .name("")
+                .name(" ")
                 .build();
     }
 

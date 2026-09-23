@@ -1,6 +1,8 @@
 package api;
 
 import api.data.BuildInfo;
+import api.generators.BuildCommands;
+import api.generators.CommandLineCommand;
 import api.generators.RandomData;
 import api.models.build.BuildResponse;
 import api.models.build_step.CreateBuildStepRequest;
@@ -11,14 +13,14 @@ import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.EnableAgent;
 import common.annotations.Project;
-import common.annotations.User;
+import common.annotations.CreateAndDeleteUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@User
+@CreateAndDeleteUser
 public class RunBuildTest extends BaseTest {
     @Test
     @Project
@@ -40,10 +42,12 @@ public class RunBuildTest extends BaseTest {
         String buildTypeId = buildResponse.getId();
 
         // Create Build step
-        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
+
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildTypeResponse build = BuildSteps.getBuild(buildTypeId);
         BuildSteps.assertBuildStep(
                 build,
                 buildTypeId,
@@ -94,10 +98,12 @@ public class RunBuildTest extends BaseTest {
         String buildTypeId = buildResponse.getId();
 
         // Create Build step
-        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
+
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildTypeResponse build = BuildSteps.getBuild(buildResponse.getId());
         BuildSteps.assertBuildStep(
                 build,
                 buildTypeId,
