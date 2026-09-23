@@ -1,6 +1,6 @@
 package api;
 
-import api.data.BuildInfo;
+import common.data.BuildInfo;
 import api.generators.BuildCommands;
 import api.generators.CommandLineCommand;
 import api.models.build.BuildResponse;

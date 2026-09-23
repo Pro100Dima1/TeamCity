@@ -1,6 +1,6 @@
 package api;
 
-import api.data.JsonPaths;
+import common.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.user.CreateUserRequest;
 import api.models.user.UserResponse;

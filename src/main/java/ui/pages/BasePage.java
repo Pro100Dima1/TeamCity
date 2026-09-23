@@ -26,7 +26,6 @@ public abstract class BasePage<T extends BasePage> {
         return (T) this;
     }
 
-
     public T click(SelenideElement element, String link) {
         element(link).shouldBe(visible, TIMEOUT)
                 .shouldBe(enabled)
@@ -70,6 +69,4 @@ public abstract class BasePage<T extends BasePage> {
         Selenide.refresh();
         return (T) this;
     }
-
-
 }
