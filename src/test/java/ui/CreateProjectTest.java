@@ -12,7 +12,7 @@ import ui.pages.MainPage;
 
 import java.util.List;
 
-public class CreateCreateAndDeleteProjectTest extends BaseUiTest {
+public class CreateProjectTest extends BaseUiTest {
 
     @Test
     @CreateUserAndLogIn
