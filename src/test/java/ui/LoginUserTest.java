@@ -28,7 +28,4 @@ class LoginUserTest extends BaseUiTest {
                 .login(user.username(), user.password().toLowerCase())
                 .checkErrorMessage();
     }
-
-
-
 }

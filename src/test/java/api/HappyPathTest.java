@@ -19,8 +19,8 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 public class HappyPathTest extends BaseTest {
     @Test
-    @CreateAndDeleteProject
     @CreateAndDeleteUser
+    @CreateAndDeleteProject
     @EnableAgent(enabled = true)
     @ResourceLock(
             value = "teamcity-agent",

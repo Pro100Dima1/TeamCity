@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class CreateCreateAndDeleteProjectTest extends BaseTest {
+public class CreateProjectTest extends BaseTest {
     private String projectId;
 
     @Test

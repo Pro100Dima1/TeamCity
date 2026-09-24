@@ -15,8 +15,8 @@ import java.util.List;
 public class CreateBuildTest extends BaseTest {
 
     @Test
-    @CreateAndDeleteProject
     @CreateAndDeleteUser
+    @CreateAndDeleteProject
     void userCanCreateBuildWithValidData(ProjectContext project) {
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
         BuildTypeResponse buildResponse =
@@ -30,8 +30,8 @@ public class CreateBuildTest extends BaseTest {
     }
 
     @Test
-    @CreateAndDeleteProject
     @CreateAndDeleteUser
+    @CreateAndDeleteProject
     void userCanNotCreateBuildWithInvalidData(ProjectContext project) {
         CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(project.projectId());
         BuildTypeResponse buildResponse =

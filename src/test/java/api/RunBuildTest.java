@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RunBuildTest extends BaseTest {
     @Test
-    @CreateAndDeleteProject
     @CreateAndDeleteUser
+    @CreateAndDeleteProject
     @EnableAgent(enabled = true)
     @ResourceLock(
             value = "teamcity-agent",
@@ -69,8 +69,8 @@ public class RunBuildTest extends BaseTest {
     }
 
     @Test
-    @CreateAndDeleteProject
     @CreateAndDeleteUser
+    @CreateAndDeleteProject
     void userCanNotRunBuildWithoutBuildConfiguration() {
         BuildResponse buildRun = BuildSteps.runBuildWithoutConfiguration(RandomData.getId());
         BuildResponse build = BuildSteps.getNotExistingBuild(buildRun.getId());
@@ -80,8 +80,8 @@ public class RunBuildTest extends BaseTest {
     }
 
     @Test
-    @CreateAndDeleteProject
     @CreateAndDeleteUser
+    @CreateAndDeleteProject
     @EnableAgent(enabled = false)
     @ResourceLock(
             value = "teamcity-agent",
