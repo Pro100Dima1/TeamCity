@@ -1,5 +1,6 @@
 package api;
 
+import common.annotations.CreateAndDeleteUser;
 import common.data.BuildInfo;
 import api.generators.BuildCommands;
 import api.generators.CommandLineCommand;
@@ -11,16 +12,15 @@ import api.models.comparison.ModelAssertions;
 import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.EnableAgent;
-import common.annotations.Project;
-import common.annotations.CreateAndDeleteUser;
+import common.annotations.CreateAndDeleteProject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
-@CreateAndDeleteUser
 public class HappyPathTest extends BaseTest {
     @Test
-    @Project
+    @CreateAndDeleteProject
+    @CreateAndDeleteUser
     @EnableAgent(enabled = true)
     @ResourceLock(
             value = "teamcity-agent",

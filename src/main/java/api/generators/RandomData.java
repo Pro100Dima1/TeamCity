@@ -27,6 +27,6 @@ public final class RandomData {
     }
 
     public static String getBuildName() {
-        return RandomStringUtils.randomAlphabetic(10);
+        return "Build_ " + RandomStringUtils.randomAlphabetic(10);
     }
 }

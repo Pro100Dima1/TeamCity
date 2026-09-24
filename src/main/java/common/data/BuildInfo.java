@@ -9,8 +9,6 @@ public enum BuildInfo {
     CANCEL_STATUS("CANCELED"),
     FINISHED_STATE("finished"),
     QUEUED_STATE("queued"),
-
-
     WAIT_REASON("There are no idle compatible agents which can run this build");
 
     private final String value;

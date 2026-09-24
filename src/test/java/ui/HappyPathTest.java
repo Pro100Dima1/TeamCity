@@ -1,53 +1,78 @@
 package ui;
 
-import common.data.BuildInfo;
 import api.generators.BuildCommands;
 import api.generators.CommandLineCommand;
-import api.models.build.BuildResponse;
+import api.generators.RandomData;
 import api.models.build_step.CreateBuildStepRequest;
-import api.models.build_type.BuildTypeResponse;
-import api.models.build_type.CreateBuildTypeRequest;
+import api.models.project.CreateProjectRequest;
 import api.steps.BuildSteps;
-import common.ProjectContext;
-import common.annotations.CreateUserAndLogIn;
+import api.steps.ProjectSteps;
+import common.UserContext;
+import common.annotations.CreateAndDeleteUser;
 import common.annotations.EnableAgent;
-import common.annotations.Project;
 import org.junit.jupiter.api.Test;
-import ui.pages.MainPage;
-import ui.pages.ProjectPage;
-import ui.pages.RunBuildPage;
+import org.junit.jupiter.api.parallel.ResourceAccessMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import ui.pages.*;
 
-public class HappyPathTest extends BaseUiTest{
+public class HappyPathTest extends BaseUiTest {
 
     @Test
-    @CreateUserAndLogIn
-    @Project
-    @EnableAgent()
-    void userCanRunExistingBuild(ProjectContext project) {
-        new MainPage().open();
+    @CreateAndDeleteUser
+    @EnableAgent(enabled = true)
+    @ResourceLock(
+            value = "teamcity-agent",
+            mode = ResourceAccessMode.READ
+    )
+    void fullHappyPathViaUI(UserContext user) {
+        new LoginPage().open().login(user.username(), user.password());
+        new MainPage().createProject();
 
-        CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
-        BuildTypeResponse buildResponse =
-                BuildSteps.createBuild(buildRequest);
-        String buildTypeId = buildResponse.getId();
+        CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
+        new ProjectPage()
+                .projectPageShouldBeOpened()
+                .enterProjectName(projectRequest.getName())
+                .enterProjectId(projectRequest.getId())
+                .enterProjectDescription(projectRequest.getDescription())
+                .createProject()
+                .shouldShowConnectionStep()
+                .proceedWithoutRepository()
+                .shouldShowSetupBuildStep()
+                .skipSetup()
+                .projectTitleCheck(projectRequest.getName())
+                .createBuildConfiguration();
 
+        String buildName = RandomData.getBuildName();
         CommandLineCommand command = BuildCommands.randomCommandLineCommand();
         CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
-        BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildResponse buildRun = BuildSteps.runBuild(buildTypeId);
-        BuildSteps.waitForBuild(buildRun.getId());
-
-        new ProjectPage()
-                .click(ProjectPage.projectLink(project.projectName()))
-                .click(ProjectPage.buildLink(buildRequest.getName()));
+        new CreateBuildPage()
+                .shouldShowSetupYourBuild()
+                .parentProjectShouldBeSet(projectRequest.getName())
+                .enterBuildName(buildName)
+                .createBuild()
+                .buildShouldBeOpened(buildName)
+                .openBuildStepsTab()
+                .addBuildSteps()
+                .selectCommandLine()
+                .enterBuildStepName(buildStepRequest.getName())
+                .enterBuildStepId(buildStepRequest.getId())
+                .clickSaveButton()
+                .buildCanNotBeCreatedWithoutScript()
+                .enterStepCommand(command.executable() + " " + command.parameters())
+                .clickSaveButton()
+                .buildSettingsUpdates()
+                .shouldHaveBuildSteps(buildStepRequest.getName(), command.parameters());
 
         new RunBuildPage()
-                .elementShouldHaveText(RunBuildPage.buildStatus, BuildInfo.SUCCESS_STATUS.getValue())
+                .runBuildFromProject()
+                .checkSuccessBuildIcon()
+                .openBuildLog()
                 .refreshPage()
-                .click(RunBuildPage.buildNumberLink(1))
-                .click(RunBuildPage.buildLogTab)
-                .click(RunBuildPage.expandStepButton(buildStepRequest.getName()))
-                .elementShouldBeVisible(RunBuildPage.logMessage(command.executable() + " " + command.parameters()));
+                .expandBuildLog(buildStepRequest.getName())
+                .refreshPage()
+                .shouldContainCommand(command.parameters());
+
+        ProjectSteps.deleteProject(projectRequest.getId());
     }
 }

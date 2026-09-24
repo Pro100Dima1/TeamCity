@@ -1,6 +1,6 @@
 package common.annotations;
 
-import common.extensions.ProjectExtension;
+import common.extensions.CreateAndDeleteProjectExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith(ProjectExtension.class)
-public @interface Project {
+@ExtendWith(CreateAndDeleteProjectExtension.class)
+public @interface CreateAndDeleteProject {
 }

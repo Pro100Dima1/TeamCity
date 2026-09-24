@@ -9,7 +9,7 @@ import api.models.build_type.CreateBuildTypeRequest;
 import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.CreateUserAndLogIn;
-import common.annotations.Project;
+import common.annotations.CreateAndDeleteProject;
 import org.junit.jupiter.api.Test;
 import ui.pages.CreateBuildPage;
 import ui.pages.MainPage;
@@ -19,13 +19,13 @@ public class CreateBuildTest extends BaseUiTest {
 
     @Test
     @CreateUserAndLogIn
-    @Project
+    @CreateAndDeleteProject
     void userCanCreateBuildWithValidData(ProjectContext project) {
         new MainPage().open();
         new ProjectPage()
-                .click(ProjectPage.projectLink(project.projectName()))
-                .click(ProjectPage.editSettings)
-                .click(ProjectPage.createBuildConfigurationButton);
+                .openProject(project.projectName())
+                .editSettings()
+                .createBuildConfiguration();
 
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
         CommandLineCommand commandLine = BuildCommands.randomCommandLineCommand();
@@ -38,22 +38,22 @@ public class CreateBuildTest extends BaseUiTest {
         );
 
         new CreateBuildPage()
-                .elementShouldHaveText(CreateBuildPage.title, CreateBuildPage.setUpYourBuild)
-                .elementShouldBeVisible(CreateBuildPage.parentProject(project.projectName()))
-                .clickAndSetValue(CreateBuildPage.buildNameInput, buildRequest.getName())
-                .click(CreateBuildPage.createButton)
-                .elementShouldHaveText(CreateBuildPage.buildTitle, buildRequest.getName())
-                .click((CreateBuildPage.buildStepsTab))
-                .click(CreateBuildPage.addBuildStepButton)
-                .click((CreateBuildPage.commandLineStep))
-                .clickAndSetValue(CreateBuildPage.buildStepName, buildStepRequest.getName())
-                .clickAndSetValue(CreateBuildPage.buildStepId, buildStepRequest.getId())
-                .click(CreateBuildPage.saveButton)
-                .elementShouldHaveText(CreateBuildPage.errorMessageNoScript, CreateBuildPage.scriptAbsenceMessage)
+                .shouldShowSetupYourBuild()
+                .parentProjectShouldBeSet(project.projectName())
+                .enterBuildName(buildRequest.getName())
+                .createBuild()
+                .buildShouldBeOpened(buildRequest.getName())
+                .openBuildStepsTab()
+                .addBuildSteps()
+                .selectCommandLine()
+                .enterBuildStepName(buildStepRequest.getName())
+                .enterBuildStepId(buildStepRequest.getId())
+                .clickSaveButton()
+                .buildCanNotBeCreatedWithoutScript()
                 .enterStepCommand(command)
-                .click(CreateBuildPage.saveButton)
-                .elementShouldHaveText(CreateBuildPage.successMessage, CreateBuildPage.buildSettingsUpdated)
-                .shouldHaveBuildSteps(buildStepRequest.getName(), CreateBuildPage.buildStepType, command);
+                .clickSaveButton()
+                .buildSettingsUpdates()
+                .shouldHaveBuildSteps(buildStepRequest.getName(), command);
 
         BuildTypeResponse build = BuildSteps.getBuildByName(project.projectId(), buildRequest.getName());
         BuildSteps.assertBuildStep(

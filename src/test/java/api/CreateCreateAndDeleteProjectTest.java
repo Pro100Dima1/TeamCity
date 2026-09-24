@@ -1,20 +1,20 @@
 package api;
 
+import common.annotations.CreateAndDeleteUser;
 import common.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
-import common.annotations.CreateAndDeleteUser;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@CreateAndDeleteUser
-public class CreateProjectTest extends BaseTest {
+public class CreateCreateAndDeleteProjectTest extends BaseTest {
     private String projectId;
 
     @Test
+    @CreateAndDeleteUser
     void userCanCreateProjectWithValidData() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
@@ -31,6 +31,7 @@ public class CreateProjectTest extends BaseTest {
     }
 
     @Test
+    @CreateAndDeleteUser
     void userCanNotCreateProjectWithBlankName() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectBlankName();
 
@@ -39,6 +40,7 @@ public class CreateProjectTest extends BaseTest {
     }
 
     @Test
+    @CreateAndDeleteUser
     void userCanNotCreateProjectWithDuplicateId() {
         CreateProjectRequest project1Request = ProjectSteps.buildProjectValid();
         ProjectSteps.createProject(project1Request);

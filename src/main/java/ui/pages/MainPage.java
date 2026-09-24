@@ -14,4 +14,14 @@ public class MainPage extends BasePage<MainPage> {
     public String url() {
         return "/favorite/projects.html";
     }
+
+    public MainPage welcomeMessageShouldBeVisible() {
+        elementShouldBeVisible(welcomeText);
+        return this;
+    }
+
+    public MainPage createProject() {
+        click(createProject);
+        return this;
+    }
 }

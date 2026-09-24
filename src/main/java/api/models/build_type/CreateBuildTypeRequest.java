@@ -14,6 +14,7 @@ import lombok.*;
 public class CreateBuildTypeRequest extends BaseModel {
     @GeneratingRule(regex = "[a-zA-Z][a-zA-Z0-9_]{7}")
     private String id;
+    @GeneratingRule(regex = "Build_[A-Z][a-z]{3}")
     private String name;
     private ProjectResponse project;
     private CreateBuildStepRequest steps;

@@ -6,13 +6,12 @@ import com.codeborne.selenide.SelenideElement;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.element;
 
 
 public abstract class BasePage<T extends BasePage> {
-    public abstract String url();
-    private static final Duration TIMEOUT = Duration.ofSeconds(60);
+    private static final Duration TIMEOUT = Duration.ofSeconds(30);
 
+    public abstract String url();
 
     public T open() {
         return Selenide.open(url(), (Class<T>) this.getClass());
@@ -20,14 +19,6 @@ public abstract class BasePage<T extends BasePage> {
 
     public T click(SelenideElement element) {
         element.shouldBe(visible)
-                .shouldBe(enabled)
-                .click();
-
-        return (T) this;
-    }
-
-    public T click(SelenideElement element, String link) {
-        element(link).shouldBe(visible, TIMEOUT)
                 .shouldBe(enabled)
                 .click();
 
@@ -47,9 +38,9 @@ public abstract class BasePage<T extends BasePage> {
         element.shouldBe(visible)
                 .shouldBe(enabled)
                 .click();
-                element.clear();
-                element.setValue(value);
-                element.shouldHave(value(value));
+        element.clear();
+        element.setValue(value);
+        element.shouldHave(value(value));
 
         return (T) this;
     }
@@ -59,7 +50,7 @@ public abstract class BasePage<T extends BasePage> {
         return (T) this;
     }
 
-    public T elementShouldHaveText (SelenideElement element, String expectedText) {
+    public T elementShouldHaveText(SelenideElement element, String expectedText) {
         element.shouldBe(visible)
                 .shouldHave(text(expectedText), TIMEOUT);
         return (T) this;

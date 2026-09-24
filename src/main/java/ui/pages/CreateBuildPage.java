@@ -9,30 +9,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateBuildPage extends BasePage<CreateBuildPage> {
 
-    public static String buildSettingsUpdated = "Build step settings updated.";
-    public static String scriptAbsenceMessage = "Script content must be specified";
-    public static String buildStepType = "Command Line";
-    public static String setUpYourBuild = "Set up your build";
+    private static String buildSettingsUpdated = "Build step settings updated.";
+    private static String scriptAbsenceMessage = "Script content must be specified";
+    private static String buildStepType = "Command Line";
+    private static String setUpYourBuild = "Set up your build";
 
-    public static SelenideElement title = $("h1");
-    public static SelenideElement buildNameInput = $("input[aria-label='Name']");
-    public static SelenideElement createButton = $(Selectors.byText("Create"));
-    public static SelenideElement buildTitle = $(".restPageTitleWrapper");
-    public static SelenideElement buildStepsTab = $$(".ring-tabs-container span").findBy(text("Build Steps"));
-    public static SelenideElement addBuildStepButton = $("#buildStepsContainerInner").$("a.btn");
-    public static SelenideElement commandLineStep = $("[data-test='build-step-selector-item runner']:nth-of-type(4)");
-    public static SelenideElement buildStepName = $("#buildStepName");
-    public static SelenideElement buildStepId = $("#newRunnerId");
-    public static SelenideElement buildStepCommandEditor = $(".CodeMirror");
-    public static SelenideElement saveButton = $("input[name='submitButton']");
-    public static SelenideElement buildStepRow = $("tr.editBuildStepRow");
-    public static SelenideElement stepName = buildStepRow.$("td.stepName div.stepName strong");
-    public static SelenideElement stepParameters = buildStepRow.$("td.stepDescription.beforeActions")
+    private static SelenideElement title = $("h1");
+    private static SelenideElement buildNameInput = $("input[aria-label='Name']");
+    private static SelenideElement createButton = $(Selectors.byText("Create"));
+    private static SelenideElement buildTitle = $(".restPageTitleWrapper");
+    private static SelenideElement buildStepsTab = $$(".ring-tabs-container span").findBy(text("Build Steps"));
+    private static SelenideElement addBuildStepButton = $("#buildStepsContainerInner").$("a.btn");
+    private static SelenideElement commandLineStep = $("[data-test='build-step-selector-item runner']:nth-of-type(4)");
+    private static SelenideElement buildStepName = $("#buildStepName");
+    private static SelenideElement buildStepId = $("#newRunnerId");
+    private static SelenideElement buildStepCommandEditor = $(".CodeMirror");
+    private static SelenideElement saveButton = $("input[name='submitButton']");
+    private static SelenideElement buildStepRow = $("tr.editBuildStepRow");
+    private static SelenideElement stepName = buildStepRow.$("td.stepName div.stepName strong");
+    private static SelenideElement stepParameters = buildStepRow.$("td.stepDescription.beforeActions")
             .$$("div.stepDescription").first();
-    public static SelenideElement successMessage = $("#unprocessed_buildRunnerSettingsUpdated");
-    public static SelenideElement errorMessageNoScript = $x("//span[@id='error_script.content']");
+    private static SelenideElement successMessage = $("#unprocessed_buildRunnerSettingsUpdated");
+    private static SelenideElement errorMessageNoScript = $x("//span[@id='error_script.content']");
 
-    public static SelenideElement parentProject(String projectName) {
+    private static SelenideElement parentProject(String projectName) {
         return $("[data-test='build-path']")
                 .$$("[data-test='ring-link path-link']")
                 .findBy(text(projectName));
@@ -41,6 +41,66 @@ public class CreateBuildPage extends BasePage<CreateBuildPage> {
     @Override
     public String url() {
         return "";
+    }
+
+    public CreateBuildPage shouldShowSetupYourBuild() {
+        elementShouldHaveText(title,setUpYourBuild);
+        return this;
+    }
+
+    public CreateBuildPage parentProjectShouldBeSet(String projectName) {
+        elementShouldBeVisible(parentProject(projectName));
+        return this;
+    }
+
+    public CreateBuildPage enterBuildName(String buildName) {
+        clickAndSetValue(buildNameInput, buildName);
+        return this;
+    }
+
+    public CreateBuildPage createBuild() {
+        click(createButton);
+        return this;
+    }
+
+    public CreateBuildPage buildShouldBeOpened(String buildName) {
+        elementShouldHaveText(buildTitle,buildName);
+        return this;
+    }
+
+    public CreateBuildPage openBuildStepsTab() {
+        click(buildStepsTab);
+        return this;
+    }
+
+    public CreateBuildPage addBuildSteps() {
+        click(addBuildStepButton);
+        return this;
+    }
+
+    public CreateBuildPage selectCommandLine() {
+        click(commandLineStep);
+        return this;
+    }
+
+    public CreateBuildPage enterBuildStepName(String stepName) {
+        clickAndSetValue(buildStepName, stepName);
+        return this;
+    }
+
+    public CreateBuildPage enterBuildStepId(String stepId) {
+        clickAndSetValue(buildStepId,stepId);
+        return this;
+    }
+
+    public CreateBuildPage clickSaveButton() {
+        click(saveButton);
+        return this;
+    }
+
+    public CreateBuildPage buildCanNotBeCreatedWithoutScript() {
+        elementShouldHaveText(errorMessageNoScript, scriptAbsenceMessage);
+        return this;
     }
 
     public CreateBuildPage enterStepCommand(String stepCommand) {
@@ -58,14 +118,18 @@ public class CreateBuildPage extends BasePage<CreateBuildPage> {
         return this;
     }
 
+    public CreateBuildPage buildSettingsUpdates() {
+        elementShouldHaveText(successMessage, buildSettingsUpdated);
+        return this;
+    }
+
     public CreateBuildPage shouldHaveBuildSteps(
             String expectedName,
-            String expectedType,
             String expectedCommand) {
         buildStepRow.shouldBe(visible);
         stepName.shouldBe(visible).shouldHave(text(expectedName));
         stepParameters.shouldBe(visible)
-                .shouldHave(partialText(expectedType))
+                .shouldHave(partialText(buildStepType))
                 .shouldHave(partialText(expectedCommand));
         return this;
     }

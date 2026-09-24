@@ -6,12 +6,11 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage extends BasePage<LoginPage> {
 
-    public static String invalidUserNameOrPasswordMessage = "Incorrect username or password.";
-
-    public static SelenideElement usernameInput = $("#username");
+    private String invalidUserNameOrPasswordMessage = "Incorrect username or password.";
+    private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");
     private final SelenideElement loginButton = $(".loginButton");
-    public static SelenideElement incorrectPasswordMessageElement = $("#errorMessage");
+    private final SelenideElement incorrectPasswordMessageElement = $("#errorMessage");
 
     @Override
     public String url() {
@@ -19,9 +18,14 @@ public class LoginPage extends BasePage<LoginPage> {
     }
 
     public LoginPage login(String username, String password) {
-        setValue(usernameInput, username);
-        setValue(passwordInput, password);
-        click(loginButton);
+        usernameInput.setValue(username);
+        passwordInput.setValue(password);
+        loginButton.click();
+        return this;
+    }
+
+    public LoginPage checkErrorMessage() {
+        elementShouldHaveText(incorrectPasswordMessageElement, invalidUserNameOrPasswordMessage);
         return this;
     }
 }

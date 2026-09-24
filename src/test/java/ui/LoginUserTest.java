@@ -12,10 +12,12 @@ class LoginUserTest extends BaseUiTest {
     @Test
     @CreateAndDeleteUser
     void userShouldLoginViaUiWithValidData(UserContext user) {
-        new LoginPage().open().login(user.username(), user.password());
+        new LoginPage()
+                .open()
+                .login(user.username(), user.password());
 
         new MainPage()
-                .elementShouldBeVisible(MainPage.welcomeText);
+                .welcomeMessageShouldBeVisible();
     }
 
     @Test
@@ -24,6 +26,9 @@ class LoginUserTest extends BaseUiTest {
         new LoginPage()
                 .open()
                 .login(user.username(), user.password().toLowerCase())
-                .elementShouldHaveText(LoginPage.incorrectPasswordMessageElement, LoginPage.invalidUserNameOrPasswordMessage);
+                .checkErrorMessage();
     }
+
+
+
 }

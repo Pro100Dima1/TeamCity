@@ -1,22 +1,21 @@
 package api;
 
+import common.annotations.CreateAndDeleteUser;
 import common.data.JsonPaths;
 import api.models.build_type.BuildTypeResponse;
 import api.models.build_type.CreateBuildTypeRequest;
 import api.models.comparison.ModelAssertions;
 import api.steps.BuildSteps;
 import common.ProjectContext;
-import common.annotations.Project;
-import common.annotations.CreateAndDeleteUser;
+import common.annotations.CreateAndDeleteProject;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@CreateAndDeleteUser
 public class CreateBuildTest extends BaseTest {
 
     @Test
-    @Project
+    @CreateAndDeleteProject
     @CreateAndDeleteUser
     void userCanCreateBuildWithValidData(ProjectContext project) {
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
@@ -31,7 +30,7 @@ public class CreateBuildTest extends BaseTest {
     }
 
     @Test
-    @Project
+    @CreateAndDeleteProject
     @CreateAndDeleteUser
     void userCanNotCreateBuildWithInvalidData(ProjectContext project) {
         CreateBuildTypeRequest buildRequest = BuildSteps.buildBlankName(project.projectId());
