@@ -1,5 +1,6 @@
 package ui;
 
+import api.generators.RandomData;
 import api.models.agent.AgentResponse;
 import api.steps.AgentSteps;
 import common.annotations.CreateUserAndLogIn;
@@ -20,10 +21,12 @@ public class AgentTest extends BaseUiTest {
             value = "teamcity-agent",
             mode = ResourceAccessMode.READ
     )
-    void userCanOpenAgentsOverviewAndSeeList() {
+    void userCanOpenAgentsOverviewAndSeeActiveAgent() {
         new AgentPage()
-                .openPage()
-                .verifyAgentOverviewState();
+                .open()
+                .verifyAgentOverviewState()
+                .verifyAgentIsEnabled()
+                .verifyAgentIpAddress(AgentSteps.getAgent().getName());
 
         List<AgentResponse> agentsList = AgentSteps.getAllAgents();
         softly.assertThat(agentsList).as("Список агентов на бэкенде не должен быть пустым").isNotEmpty();
@@ -35,42 +38,19 @@ public class AgentTest extends BaseUiTest {
     @EnableAgent(enabled = true)
     @ResourceLock(
             value = "teamcity-agent",
-            mode = ResourceAccessMode.READ
-    )
-    void agentStatusIsAuthorizedAndActive() {
-        AgentResponse agent = AgentSteps.getAgent();
-        String expectedAgentIp = agent.getName();
-
-        new AgentPage()
-                .openPage()
-                .verifyIdleStatusIsVisible()
-                .verifyAgentIsEnabled()
-                .verifyAgentIpAddress(expectedAgentIp);
-    }
-
-    @Test
-    @CreateUserAndLogIn
-    @EnableAgent(enabled = true)
-    @ResourceLock(
-            value = "teamcity-agent",
             mode = ResourceAccessMode.READ_WRITE
     )
     void userCanToggleAgentStatusWithComments() {
         new AgentPage()
-                .openPage()
+                .open()
                 .verifyAgentIsEnabled()
-
                 .clickAgentToggle()
-                .enterComment(AgentSteps.buildAgentComment())
+                .enterComment(RandomData.getComment())
                 .confirmDisable()
-
                 .verifyAgentIsDisabled()
-
                 .clickAgentToggle()
-                .enterComment(AgentSteps.buildAgentComment())
+                .enterComment(RandomData.getComment())
                 .confirmEnable()
-
                 .verifyAgentIsEnabled();
     }
-
 }

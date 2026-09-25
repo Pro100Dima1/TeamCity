@@ -9,26 +9,20 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class AgentPage extends BasePage<AgentPage> {
 
-    @Override
-    public String url() {
-        return "/agents";
-    }
-
-    public AgentPage openPage() {
-        return open();
-    }
-
     private final SelenideElement overviewHeader = $("h1");
     private final SelenideElement allAgentsTab = $(".ring-tabs-container .ring-tabs-visible");
     private final SelenideElement idleStatusLabel = $(Selectors.byText("Idle"));
     private final SelenideElement agentIpLink = $("[class*='AgentListView-module__link']");
     private final SelenideElement agentToggle = $(Selectors.byAttribute("data-test", "ring-toggle"));
-
-
     private final SelenideElement agentToggleClickableZone = $(".ring-toggle-switch");
     private final SelenideElement commentInput = $("textarea.ring-input-input[placeholder='Add an explanation for colleagues']");
     private final SelenideElement submitDisableButton = $x("//button[@type='submit' and normalize-space(.)='Disable']");
     private final SelenideElement submitEnableButton = $x("//button[@type='submit' and normalize-space(.)='Enable']");
+
+    @Override
+    public String url() {
+        return "/agents";
+    }
 
     public AgentPage verifyOverviewHeader() {
         return elementShouldHaveText(overviewHeader, "Overview");
@@ -48,7 +42,6 @@ public class AgentPage extends BasePage<AgentPage> {
         return this;
     }
 
-    // Проверка, что агент выключен (атрибут title меняется)
     public AgentPage verifyAgentIsDisabled() {
         agentToggle.shouldBe(visible)
                 .shouldHave(Condition.attribute("title", "Agent is disabled, click to enable."));
@@ -59,7 +52,6 @@ public class AgentPage extends BasePage<AgentPage> {
         return elementShouldHaveText(agentIpLink, expectedIp);
     }
 
-    // Клик по тумблеру включения/выключения
     public AgentPage clickAgentToggle() {
         return click(agentToggleClickableZone);
     }
@@ -83,7 +75,6 @@ public class AgentPage extends BasePage<AgentPage> {
         executeJavaScript("arguments[0].click();", submitEnableButton);
         return this;
     }
-
 
     public AgentPage verifyAgentOverviewState() {
         return this.verifyOverviewHeader()

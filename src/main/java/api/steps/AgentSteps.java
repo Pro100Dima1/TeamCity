@@ -11,7 +11,6 @@ import api.specs.ResponseSpecs;
 import java.util.List;
 import java.util.Map;
 
-import static api.generators.RandomData.getComment;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -60,11 +59,6 @@ public class AgentSteps {
                 Endpoints.AGENTS,
                 ResponseSpecs.requestReturnsOK()
         ).getList("agent");
-    }
-
-    // Шаг-сборщик для генерации случайного комментария
-    public static String buildAgentComment() {
-        return getComment();
     }
 
 }
