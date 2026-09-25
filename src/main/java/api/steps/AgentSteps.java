@@ -8,8 +8,10 @@ import api.requesters.interfaces.Endpoints;
 import api.specs.RequestSpecs;
 import api.specs.ResponseSpecs;
 
+import java.util.List;
 import java.util.Map;
 
+import static api.generators.RandomData.getComment;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,4 +52,19 @@ public class AgentSteps {
                 ResponseSpecs.requestReturnsOK()
         ).get(Map.of("agentLocator", "id:" + DEFAULT_AGENT_ID));
     }
+
+    // Метод для получения списка всех агентов
+    public static List<AgentResponse> getAllAgents() {
+        return new ValidatedCrudRequester<AgentResponse>(
+                RequestSpecs.userSpec(),
+                Endpoints.AGENTS,
+                ResponseSpecs.requestReturnsOK()
+        ).getList("agent");
+    }
+
+    // Шаг-сборщик для генерации случайного комментария
+    public static String buildAgentComment() {
+        return getComment();
+    }
+
 }

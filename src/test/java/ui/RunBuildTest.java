@@ -54,7 +54,6 @@ public class RunBuildTest extends BaseUiTest {
                 .openFirstBuildDetails()
                 .openBuildLog()
                 .expandBuildLog(buildStepRequest.getName())
-                .refreshPage()
                 .shouldContainCommand(command.parameters());
     }
 
