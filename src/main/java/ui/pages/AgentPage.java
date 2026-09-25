@@ -4,10 +4,15 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
 public class AgentPage extends BasePage<AgentPage> {
+
+    private final String agentPageTitle = "Overview";
+    private final String allAgentTab = "All Agents";
+    private final String agentEnabledMessage = "Agent is enabled, click to disable.";
+    private final String agentDisabledMessage = "Agent is disabled, click to enable.";
 
     private final SelenideElement overviewHeader = $("h1");
     private final SelenideElement allAgentsTab = $(".ring-tabs-container .ring-tabs-visible");
@@ -25,11 +30,11 @@ public class AgentPage extends BasePage<AgentPage> {
     }
 
     public AgentPage verifyOverviewHeader() {
-        return elementShouldHaveText(overviewHeader, "Overview");
+        return elementShouldHaveText(overviewHeader, agentPageTitle);
     }
 
     public AgentPage verifyAllAgentsTabIsVisible() {
-        return elementShouldHaveText(allAgentsTab, "All Agents");
+        return elementShouldHaveText(allAgentsTab, allAgentTab);
     }
 
     public AgentPage verifyIdleStatusIsVisible() {
@@ -38,13 +43,13 @@ public class AgentPage extends BasePage<AgentPage> {
 
     public AgentPage verifyAgentIsEnabled() {
         agentToggle.shouldBe(visible)
-                .shouldHave(Condition.attribute("title", "Agent is enabled, click to disable."));
+                .shouldHave(Condition.attribute("title", agentEnabledMessage));
         return this;
     }
 
     public AgentPage verifyAgentIsDisabled() {
         agentToggle.shouldBe(visible)
-                .shouldHave(Condition.attribute("title", "Agent is disabled, click to enable."));
+                .shouldHave(Condition.attribute("title", agentDisabledMessage));
         return this;
     }
 

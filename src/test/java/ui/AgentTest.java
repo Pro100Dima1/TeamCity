@@ -52,6 +52,7 @@ public class AgentTest extends BaseUiTest {
                 .enterComment(RandomData.getComment())
                 .confirmEnable()
                 .verifyAgentIsEnabled();
+
         AgentSteps.assertAgentReady(AgentSteps.getAgent());
     }
 }
