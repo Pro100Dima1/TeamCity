@@ -6,7 +6,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage extends BasePage<LoginPage> {
 
-    private final static String INVALID_USER_NAME_OR_PASSWORD_MESSAGE = "Incorrect username or password.";
+    private static final String INVALID_USER_NAME_OR_PASSWORD_MESSAGE = "Incorrect username or password.";
 
     private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");

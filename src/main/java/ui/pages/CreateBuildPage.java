@@ -9,10 +9,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateBuildPage extends BasePage<CreateBuildPage> {
 
-    private final static String BUILD_SETTINGS_UPDATES = "Build step settings updated.";
-    private final static String SCRIPT_ABSENCE_MESSAGE = "Script content must be specified";
-    private final static String BUILD_STEP_TYPE = "Command Line";
-    private final static String SET_UP_YOUR_BUILD = "Set up your build";
+    private static final String BUILD_SETTINGS_UPDATES = "Build step settings updated.";
+    private static final String SCRIPT_ABSENCE_MESSAGE = "Script content must be specified";
+    private static final String BUILD_STEP_TYPE = "Command Line";
+    private static final String SET_UP_YOUR_BUILD = "Set up your build";
 
     private final SelenideElement title = $("h1");
     private final SelenideElement buildNameInput = $("input[aria-label='Name']");
@@ -83,8 +83,8 @@ public class CreateBuildPage extends BasePage<CreateBuildPage> {
         return this;
     }
 
-    public CreateBuildPage enterBuildStepName(String stepName) {
-        clickAndSetValue(buildStepName, stepName);
+    public CreateBuildPage enterBuildStepName(String stepNameField) {
+        clickAndSetValue(buildStepName, stepNameField);
         return this;
     }
 

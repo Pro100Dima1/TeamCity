@@ -9,10 +9,10 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class AgentPage extends BasePage<AgentPage> {
 
-    private final String AGENT_PAGE_TITLE = "Overview";
-    private final String ALL_AGENT_TAB = "All Agents";
-    private final String AGENT_ENABLED_MESSAGE = "Agent is enabled, click to disable.";
-    private final String AGENT_DISABLED_MESSAGE = "Agent is disabled, click to enable.";
+    private static final String AGENT_PAGE_TITLE = "Overview";
+    private static final String ALL_AGENT_TAB = "All Agents";
+    private static final String AGENT_ENABLED_MESSAGE = "Agent is enabled, click to disable.";
+    private static final String AGENT_DISABLED_MESSAGE = "Agent is disabled, click to enable.";
 
     private final SelenideElement overviewHeader = $("h1");
     private final SelenideElement allAgentsTab = $(".ring-tabs-container .ring-tabs-visible");

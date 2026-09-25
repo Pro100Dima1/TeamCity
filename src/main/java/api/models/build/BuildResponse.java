@@ -18,5 +18,5 @@ public class BuildResponse extends BaseModel {
     private String state;
     private Boolean running;
     private BuildTypeResponse buildType;
-    private String WaitReason;
+    private String waitReason;
 }

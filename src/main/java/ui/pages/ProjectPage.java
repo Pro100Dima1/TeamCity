@@ -8,10 +8,10 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class ProjectPage extends BasePage<ProjectPage> {
 
-    private final static String CREATE_PROJECT_PAGE_TITLE = "New Project";
-    private final static String CREATE_BUILD_PAGE_TITLE = "New Connection";
-    private final static String SET_UP_BUILD_PAGE_TITLE = "Set up your build";
-    private final static String PROJECT_NAME_REQUIRED_MESSAGE = "Project name is required";
+    private static final String CREATE_PROJECT_PAGE_TITLE = "New Project";
+    private static final String CREATE_BUILD_PAGE_TITLE = "New Connection";
+    private static final String SET_UP_BUILD_PAGE_TITLE = "Set up your build";
+    private static final String PROJECT_NAME_REQUIRED_MESSAGE = "Project name is required";
 
     private final SelenideElement title = $("h1");
     private final SelenideElement projectNameInput = $("[data-test='project-name-input']");

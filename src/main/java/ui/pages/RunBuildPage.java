@@ -5,8 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.
-        $x;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class RunBuildPage extends BasePage<RunBuildPage> {
 
@@ -23,9 +22,9 @@ public class RunBuildPage extends BasePage<RunBuildPage> {
     private final SelenideElement buildLogTab = $("a[data-test='ring-link'][aria-label='Build Log']");
 
     private SelenideElement stepLog(String stepName) {
-        return $x("//div[@data-test-log-message='true']" +
-                "[.//div[@data-test='log-message-text' and contains(text(), '%s')]]"
-                        .formatted(stepName));
+        return $x("//div[@data-test-log-message='true']"
+                + "[.//div[@data-test='log-message-text' and contains(text(), '%s')]]"
+                .formatted(stepName));
     }
 
     private SelenideElement buildNumberLink(int buildNumber) {

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AgentSteps {
 
-    private final static int DEFAULT_AGENT_ID = 1;
+    private static final int DEFAULT_AGENT_ID = 1;
 
     public static void updateAgentEnabledStatus(
             int agentId,
