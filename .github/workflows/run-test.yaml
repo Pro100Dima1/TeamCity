@@ -2,10 +2,6 @@ name: Run tests
 
 on:
   push:
-    paths:
-      - 'src/**'
-      - 'pom.xml'
-      - 'checkstyle.xml'
   workflow_dispatch:
 
 jobs:
