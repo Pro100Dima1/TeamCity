@@ -8,30 +8,30 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class ProjectPage extends BasePage<ProjectPage> {
 
-    private static String createProjectPageTitle = "New Project";
-    private static String createBuildPageTitle = "New Connection";
-    private static String setUpBuildPageTitle = "Set up your build";
-    private static String projectNameRequiredMessage = "Project name is required";
+    private final static String CREATE_PROJECT_PAGE_TITLE = "New Project";
+    private final static String CREATE_BUILD_PAGE_TITLE = "New Connection";
+    private final static String SET_UP_BUILD_PAGE_TITLE = "Set up your build";
+    private final static String PROJECT_NAME_REQUIRED_MESSAGE = "Project name is required";
 
-    private static SelenideElement title = $("h1");
-    private static SelenideElement projectNameInput = $("[data-test='project-name-input']");
-    private static SelenideElement blankProjectNameErrorMessage = $("[data-test='project-name-error']");
-    private static SelenideElement projectIdInput = $("[data-test='project-id-input']");
-    private static SelenideElement projectDescriptionInput = $("textarea[aria-label='Project description']");
-    private static SelenideElement createButton = $(Selectors.byText("Create"));
-    private static SelenideElement cancelButton = $(Selectors.byText("Cancel"));
-    private static SelenideElement proceedWithoutRepository = $(Selectors.byText("Proceed without repository"));
-    private static SelenideElement skipButton = $(Selectors.byText("Skip"));
-    private static SelenideElement projectTitle = $(".restPageTitleWrapper");
-    private static SelenideElement createBuildConfigurationButton =
+    private final SelenideElement title = $("h1");
+    private final SelenideElement projectNameInput = $("[data-test='project-name-input']");
+    private final SelenideElement blankProjectNameErrorMessage = $("[data-test='project-name-error']");
+    private final SelenideElement projectIdInput = $("[data-test='project-id-input']");
+    private final SelenideElement projectDescriptionInput = $("textarea[aria-label='Project description']");
+    private final SelenideElement createButton = $(Selectors.byText("Create"));
+    private final SelenideElement cancelButton = $(Selectors.byText("Cancel"));
+    private final SelenideElement proceedWithoutRepository = $(Selectors.byText("Proceed without repository"));
+    private final SelenideElement skipButton = $(Selectors.byText("Skip"));
+    private final SelenideElement projectTitle = $(".restPageTitleWrapper");
+    private final SelenideElement createBuildConfigurationButton =
             $(".buildConfigurationsTableHeader").$("a.btn");
-    private static SelenideElement editSettings = $("[data-test='toggle-link'][aria-label='Settings']");
+    private final SelenideElement editSettings = $("[data-test='toggle-link'][aria-label='Settings']");
 
-    private static SelenideElement projectLink(String projectName) {
+    private SelenideElement projectLink(String projectName) {
         return $("[aria-label='%s']".formatted(projectName));
     }
 
-    private static SelenideElement buildLink(String buildName) {
+    private SelenideElement buildLink(String buildName) {
         return $x("//a[@data-test='ring-link' and .//span[@data-test='middle-ellipsis-searchable' and text()='%s']]"
                 .formatted(buildName));
     }
@@ -57,22 +57,22 @@ public class ProjectPage extends BasePage<ProjectPage> {
     }
 
     public ProjectPage projectPageShouldBeOpened() {
-        elementShouldHaveText(title, createProjectPageTitle);
+        elementShouldHaveText(title, CREATE_PROJECT_PAGE_TITLE);
         return this;
     }
 
     public ProjectPage createProject() {
-       click(createButton);
+        click(createButton);
         return this;
     }
 
     public ProjectPage checkErrorMessage() {
-        elementShouldHaveText(blankProjectNameErrorMessage,projectNameRequiredMessage);
+        elementShouldHaveText(blankProjectNameErrorMessage, PROJECT_NAME_REQUIRED_MESSAGE);
         return this;
     }
 
     public ProjectPage shouldShowConnectionStep() {
-        elementShouldHaveText(title, createBuildPageTitle);
+        elementShouldHaveText(title, CREATE_BUILD_PAGE_TITLE);
         return this;
     }
 
@@ -82,7 +82,7 @@ public class ProjectPage extends BasePage<ProjectPage> {
     }
 
     public ProjectPage shouldShowSetupBuildStep() {
-        elementShouldHaveText(title, setUpBuildPageTitle);
+        elementShouldHaveText(title, SET_UP_BUILD_PAGE_TITLE);
         return this;
     }
 
@@ -114,5 +114,13 @@ public class ProjectPage extends BasePage<ProjectPage> {
     public ProjectPage createBuildConfiguration() {
         click(createBuildConfigurationButton);
         return this;
+    }
+
+    public CreateBuildPage goToBuildConfiguration() {
+        return new CreateBuildPage();
+    }
+
+    public RunBuildPage goToRunBuild() {
+        return new RunBuildPage();
     }
 }

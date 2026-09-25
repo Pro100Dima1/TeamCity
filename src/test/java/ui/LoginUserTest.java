@@ -4,8 +4,6 @@ import common.UserContext;
 import common.annotations.CreateAndDeleteUser;
 import org.junit.jupiter.api.Test;
 import ui.pages.LoginPage;
-import ui.pages.MainPage;
-
 
 class LoginUserTest extends BaseUiTest {
 
@@ -14,9 +12,8 @@ class LoginUserTest extends BaseUiTest {
     void userShouldLoginViaUiWithValidData(UserContext user) {
         new LoginPage()
                 .open()
-                .login(user.username(), user.password());
-
-        new MainPage()
+                .login(user.username(), user.password())
+                .goToMainPage()
                 .welcomeMessageShouldBeVisible();
     }
 

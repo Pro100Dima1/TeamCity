@@ -25,11 +25,19 @@ public class HappyPathTest extends BaseUiTest {
             mode = ResourceAccessMode.READ
     )
     void fullHappyPathViaUI(UserContext user) {
-        new LoginPage().open().login(user.username(), user.password());
-        new MainPage().createProject();
+        String buildName = RandomData.getBuildName();
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
 
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
-        new ProjectPage()
+
+        new LoginPage()
+                .open()
+                .login(user.username(), user.password())
+                .goToMainPage()
+                .welcomeMessageShouldBeVisible()
+                .createProject()
+                .goToProjectPage()
                 .projectPageShouldBeOpened()
                 .enterProjectName(projectRequest.getName())
                 .enterProjectId(projectRequest.getId())
@@ -40,13 +48,8 @@ public class HappyPathTest extends BaseUiTest {
                 .shouldShowSetupBuildStep()
                 .skipSetup()
                 .projectTitleCheck(projectRequest.getName())
-                .createBuildConfiguration();
-
-        String buildName = RandomData.getBuildName();
-        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
-        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
-
-        new CreateBuildPage()
+                .createBuildConfiguration()
+                .goToBuildConfiguration()
                 .shouldShowSetupYourBuild()
                 .parentProjectShouldBeSet(projectRequest.getName())
                 .enterBuildName(buildName)
@@ -62,9 +65,8 @@ public class HappyPathTest extends BaseUiTest {
                 .enterStepCommand(command.executable() + " " + command.parameters())
                 .clickSaveButton()
                 .buildSettingsUpdates()
-                .shouldHaveBuildSteps(buildStepRequest.getName(), command.parameters());
-
-        new RunBuildPage()
+                .shouldHaveBuildSteps(buildStepRequest.getName(), command.parameters())
+                .goToRunBuild()
                 .runBuildFromProject()
                 .checkSuccessBuildIcon()
                 .openBuildLog()

@@ -1,13 +1,12 @@
 package ui;
 
-import common.annotations.CreateUserAndLogIn;
-import common.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
+import common.annotations.CreateUserAndLogIn;
+import common.data.JsonPaths;
 import org.junit.jupiter.api.Test;
-import ui.pages.ProjectPage;
 import ui.pages.MainPage;
 
 import java.util.List;
@@ -17,10 +16,11 @@ public class CreateProjectTest extends BaseUiTest {
     @Test
     @CreateUserAndLogIn
     void userCanCreateProjectWithValidName() {
-        new MainPage().createProject();
-
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
-        new ProjectPage()
+
+        new MainPage()
+                .createProject()
+                .goToProjectPage()
                 .projectPageShouldBeOpened()
                 .enterProjectName(projectRequest.getName())
                 .enterProjectId(projectRequest.getId())
@@ -41,11 +41,11 @@ public class CreateProjectTest extends BaseUiTest {
     @Test
     @CreateUserAndLogIn
     void userCanNotCreateProjectWithBlankName() {
-        new MainPage().createProject();
-
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectBlankName();
 
-        new ProjectPage()
+        new MainPage()
+                .createProject()
+                .goToProjectPage()
                 .projectPageShouldBeOpened()
                 .enterProjectName(projectRequest.getName())
                 .createProject()

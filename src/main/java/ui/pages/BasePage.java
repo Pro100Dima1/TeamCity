@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.*;
 
 
 public abstract class BasePage<T extends BasePage> {
-    private static final Duration TIMEOUT = Duration.ofSeconds(30);
+    private final Duration TIMEOUT = Duration.ofSeconds(30);
 
     public abstract String url();
 

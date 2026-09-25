@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import ui.pages.MainPage;
-import ui.pages.ProjectPage;
 import ui.pages.RunBuildPage;
 
 
@@ -41,12 +40,12 @@ public class RunBuildTest extends BaseUiTest {
         CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        new MainPage().open();
-        new ProjectPage()
+        new MainPage()
+                .open()
+                .goToProjectPage()
                 .openProject(project.projectName())
-                .openBuild(buildRequest.getName());
-
-        new RunBuildPage()
+                .openBuild(buildRequest.getName())
+                .goToRunBuild()
                 .runBuild()
                 .checkBuildStatus(BuildInfo.RUNNING_STATUS.getValue())
                 .checkBuildStatus(BuildInfo.SUCCESS_STATUS.getValue())
@@ -75,12 +74,12 @@ public class RunBuildTest extends BaseUiTest {
         CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        new MainPage().open();
-        new ProjectPage()
+        new MainPage()
+                .open()
+                .goToProjectPage()
                 .openProject(project.projectName())
-                .openBuild(buildRequest.getName());
-
-        new RunBuildPage()
+                .openBuild(buildRequest.getName())
+                .goToRunBuild()
                 .runBuild()
                 .checkBuildStatus(BuildInfo.RUNNING_STATUS.getValue())
                 .interruptBuildRun()
@@ -92,7 +91,7 @@ public class RunBuildTest extends BaseUiTest {
                 .openBuildLog()
                 .expandBuildLog(buildStepRequest.getName())
                 .refreshPage()
-                .shouldContainCommand(RunBuildPage.interruptRunBuildMessage);
+                .shouldContainCommand(RunBuildPage.INTERRUPT_RUN_BUILD_MESSAGE);
     }
 
     @Test
@@ -104,7 +103,7 @@ public class RunBuildTest extends BaseUiTest {
             mode = ResourceAccessMode.READ_WRITE
     )
     void userCanNotRunBuildWithoutAgent(ProjectContext project) {
-        new MainPage().open();
+
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
         BuildTypeResponse buildResponse =
                 BuildSteps.createBuild(buildRequest);
@@ -114,13 +113,14 @@ public class RunBuildTest extends BaseUiTest {
         CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        new ProjectPage()
+        new MainPage()
+                .open()
+                .goToProjectPage()
                 .openProject(project.projectName())
-                .openBuild(buildRequest.getName());
-
-        new RunBuildPage()
+                .openBuild(buildRequest.getName())
+                .goToRunBuild()
                 .runBuild()
                 .clickOnBuildTableRow()
-                .shouldHaveMessage(RunBuildPage.agentAbsenceErrorMessage);
+                .shouldHaveMessage(RunBuildPage.AGENT_ABSENCE_ERROR_MESSAGE);
     }
 }

@@ -5,12 +5,13 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.
+        $x;
 
 public class RunBuildPage extends BasePage<RunBuildPage> {
 
-    public static String agentAbsenceErrorMessage = "There are no idle compatible agents which can run this build";
-    public static String interruptRunBuildMessage = "Stopping build on agent. Reason: stop build command from the server";
+    public static String AGENT_ABSENCE_ERROR_MESSAGE = "There are no idle compatible agents which can run this build";
+    public static String INTERRUPT_RUN_BUILD_MESSAGE = "Stopping build on agent. Reason: stop build command from the server";
 
     private final SelenideElement runBuildButton = $("[data-test='run-build']");
     private final SelenideElement runBuild = $x("//span[contains(@class,'ring-button-group-split')]//button[normalize-space()='Run']");
@@ -51,11 +52,6 @@ public class RunBuildPage extends BasePage<RunBuildPage> {
     @Override
     public String url() {
         return "";
-    }
-
-    public RunBuildPage runBuild() {
-        click(runBuildButton);
-        return this;
     }
 
     public RunBuildPage runBuildFromProject() {
@@ -134,6 +130,11 @@ public class RunBuildPage extends BasePage<RunBuildPage> {
                 .shouldBe(visible)
                 .shouldHave(text(message));
 
+        return this;
+    }
+
+    public RunBuildPage runBuild() {
+        click(runBuildButton);
         return this;
     }
 }

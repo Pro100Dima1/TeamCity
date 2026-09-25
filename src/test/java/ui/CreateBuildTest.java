@@ -11,9 +11,7 @@ import common.ProjectContext;
 import common.annotations.CreateUserAndLogIn;
 import common.annotations.CreateAndDeleteProject;
 import org.junit.jupiter.api.Test;
-import ui.pages.CreateBuildPage;
 import ui.pages.MainPage;
-import ui.pages.ProjectPage;
 
 public class CreateBuildTest extends BaseUiTest {
 
@@ -21,12 +19,6 @@ public class CreateBuildTest extends BaseUiTest {
     @CreateUserAndLogIn
     @CreateAndDeleteProject
     void userCanCreateBuildWithValidData(ProjectContext project) {
-        new MainPage().open();
-        new ProjectPage()
-                .openProject(project.projectName())
-                .editSettings()
-                .createBuildConfiguration();
-
         CreateBuildTypeRequest buildRequest = BuildSteps.buildValid(project.projectId());
         CommandLineCommand commandLine = BuildCommands.randomCommandLineCommand();
         String command = commandLine.executable() + " " + commandLine.parameters();
@@ -37,7 +29,13 @@ public class CreateBuildTest extends BaseUiTest {
                 command
         );
 
-        new CreateBuildPage()
+        new MainPage()
+                .open()
+                .goToProjectPage()
+                .openProject(project.projectName())
+                .editSettings()
+                .createBuildConfiguration()
+                .goToBuildConfiguration()
                 .shouldShowSetupYourBuild()
                 .parentProjectShouldBeSet(project.projectName())
                 .enterBuildName(buildRequest.getName())

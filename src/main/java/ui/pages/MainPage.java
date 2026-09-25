@@ -7,8 +7,8 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class MainPage extends BasePage<MainPage> {
 
-    public static SelenideElement welcomeText = $(Selectors.byText("Welcome to TeamCity"));
-    public static SelenideElement createProject = $("[data-test='header-button'] [data-test-title='Create'] a");
+    public final SelenideElement welcomeText = $(Selectors.byText("Welcome to TeamCity"));
+    public final SelenideElement createProject = $("[data-test='header-button'] [data-test-title='Create'] a");
 
     @Override
     public String url() {
@@ -23,5 +23,9 @@ public class MainPage extends BasePage<MainPage> {
     public MainPage createProject() {
         click(createProject);
         return this;
+    }
+
+    public ProjectPage goToProjectPage() {
+        return new ProjectPage();
     }
 }
