@@ -29,8 +29,8 @@ public class AgentTest extends BaseUiTest {
                 .verifyAgentIpAddress(AgentSteps.getAgent().getName());
 
         List<AgentResponse> agentsList = AgentSteps.getAllAgents();
-        softly.assertThat(agentsList).as("Список агентов на бэкенде не должен быть пустым").isNotEmpty();
-        softly.assertThat(agentsList.size()).as("Размер списка объектов AgentResponse должен быть равен 1").isEqualTo(1);
+        softly.assertThat(agentsList).isNotEmpty();
+        softly.assertThat(agentsList.size()).isEqualTo(1);
     }
 
     @Test
@@ -52,5 +52,6 @@ public class AgentTest extends BaseUiTest {
                 .enterComment(RandomData.getComment())
                 .confirmEnable()
                 .verifyAgentIsEnabled();
+        AgentSteps.assertAgentReady(AgentSteps.getAgent());
     }
 }
