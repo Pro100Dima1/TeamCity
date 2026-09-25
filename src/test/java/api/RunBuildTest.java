@@ -1,6 +1,9 @@
 package api;
 
-import api.data.BuildInfo;
+import common.annotations.CreateAndDeleteUser;
+import common.data.BuildInfo;
+import api.generators.BuildCommands;
+import api.generators.CommandLineCommand;
 import api.generators.RandomData;
 import api.models.build.BuildResponse;
 import api.models.build_step.CreateBuildStepRequest;
@@ -10,18 +13,17 @@ import api.models.comparison.ModelAssertions;
 import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.EnableAgent;
-import common.annotations.Project;
-import common.annotations.User;
+import common.annotations.CreateAndDeleteProject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@User
 public class RunBuildTest extends BaseTest {
     @Test
-    @Project
+    @CreateAndDeleteUser
+    @CreateAndDeleteProject
     @EnableAgent(enabled = true)
     @ResourceLock(
             value = "teamcity-agent",
@@ -40,10 +42,12 @@ public class RunBuildTest extends BaseTest {
         String buildTypeId = buildResponse.getId();
 
         // Create Build step
-        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
+
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildTypeResponse build = BuildSteps.getBuild(buildTypeId);
         BuildSteps.assertBuildStep(
                 build,
                 buildTypeId,
@@ -65,7 +69,8 @@ public class RunBuildTest extends BaseTest {
     }
 
     @Test
-    @Project
+    @CreateAndDeleteUser
+    @CreateAndDeleteProject
     void userCanNotRunBuildWithoutBuildConfiguration() {
         BuildResponse buildRun = BuildSteps.runBuildWithoutConfiguration(RandomData.getId());
         BuildResponse build = BuildSteps.getNotExistingBuild(buildRun.getId());
@@ -75,7 +80,8 @@ public class RunBuildTest extends BaseTest {
     }
 
     @Test
-    @Project
+    @CreateAndDeleteUser
+    @CreateAndDeleteProject
     @EnableAgent(enabled = false)
     @ResourceLock(
             value = "teamcity-agent",
@@ -94,10 +100,12 @@ public class RunBuildTest extends BaseTest {
         String buildTypeId = buildResponse.getId();
 
         // Create Build step
-        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
+
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildTypeResponse build = BuildSteps.getBuild(buildResponse.getId());
         BuildSteps.assertBuildStep(
                 build,
                 buildTypeId,

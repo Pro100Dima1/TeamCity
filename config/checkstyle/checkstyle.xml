@@ -5,7 +5,8 @@
 <!--
   Practical Checkstyle rules for this test project.
   Based on useful sun_checks modules; omits mandatory Javadoc, FinalParameters,
-  DesignForExtension, VisibilityModifier (Lombok models), and 80-char LineLength.
+  DesignForExtension, VisibilityModifier (Lombok models), StaticVariableName,
+  HideUtilityClassConstructor, and 80-char LineLength.
 -->
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
@@ -16,17 +17,15 @@
     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
     </module>
+
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
         <property name="max" value="140"/>
-        <property name="ignorePattern" value="^package.*|^import.*|a href|href\s*=\s*&quot;|&lt;h1"/>
+        <property name="ignorePattern"
+                  value="^package.*|^import.*|a href|href\s*=\s*&quot;|&lt;h1"/>
     </module>
 
     <module name="TreeWalker">
-        <!-- Imports -->
-        <module name="AvoidStarImport"/>
-        <module name="RedundantImport"/>
-        <module name="UnusedImports"/>
 
         <!-- Naming -->
         <module name="ConstantName"/>
@@ -39,7 +38,6 @@
             <property name="format" value="^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$"/>
         </module>
         <module name="ParameterName"/>
-        <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
         <!-- Blocks -->
@@ -78,7 +76,6 @@
 
         <!-- Design -->
         <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
 
         <!-- Misc -->

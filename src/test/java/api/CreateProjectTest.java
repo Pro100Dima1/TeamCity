@@ -1,20 +1,20 @@
 package api;
 
-import api.data.JsonPaths;
+import common.annotations.CreateAndDeleteUser;
+import common.data.JsonPaths;
 import api.models.comparison.ModelAssertions;
 import api.models.project.CreateProjectRequest;
 import api.models.project.ProjectResponse;
 import api.steps.ProjectSteps;
-import common.annotations.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@User
 public class CreateProjectTest extends BaseTest {
     private String projectId;
 
     @Test
+    @CreateAndDeleteUser
     void userCanCreateProjectWithValidData() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectValid();
         ProjectResponse projectResponse =
@@ -31,14 +31,16 @@ public class CreateProjectTest extends BaseTest {
     }
 
     @Test
+    @CreateAndDeleteUser
     void userCanNotCreateProjectWithBlankName() {
         CreateProjectRequest projectRequest = ProjectSteps.buildProjectBlankName();
 
-        List<ProjectResponse> users = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
-        softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(projectRequest, foundProject).match());
+        List<ProjectResponse> projects = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
+        softly.assertThat(projects).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(projectRequest, foundProject).match());
     }
 
     @Test
+    @CreateAndDeleteUser
     void userCanNotCreateProjectWithDuplicateId() {
         CreateProjectRequest project1Request = ProjectSteps.buildProjectValid();
         ProjectSteps.createProject(project1Request);
@@ -48,8 +50,8 @@ public class CreateProjectTest extends BaseTest {
         project2Request.setId(projectId);
         ProjectSteps.createProjectDuplicateId(project2Request, projectId);
 
-        List<ProjectResponse> users = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
-        softly.assertThat(users).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(project2Request, foundProject).match());
+        List<ProjectResponse> projects = ProjectSteps.getAllProjects(JsonPaths.PROJECTS.getPath());
+        softly.assertThat(projects).noneSatisfy(foundProject -> ModelAssertions.assertThatModels(project2Request, foundProject).match());
 
         ProjectSteps.deleteProject(projectId);
     }

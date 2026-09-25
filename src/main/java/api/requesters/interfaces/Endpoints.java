@@ -25,6 +25,7 @@ public enum Endpoints {
     CURRENT_USER("/users/current", BaseModel.class, UserResponse.class),
     AUTH_SETTINGS("/server/authSettings", AuthSettingsRequest.class, BaseModel.class),
     AGENT("/agents/{agentLocator}", BaseModel.class, AgentResponse.class),
+    AGENTS("/agents", BaseModel.class, AgentResponse.class),
     ENABLE_AGENT("/agents/{agentLocator}/enabledInfo", BaseModel.class, BaseModel.class),
     PROJECTS("/projects", CreateProjectRequest.class, ProjectResponse.class),
     PROJECT("/projects/{projectLocator}", BaseModel.class, ProjectResponse.class),

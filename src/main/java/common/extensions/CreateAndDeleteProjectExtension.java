@@ -6,13 +6,13 @@ import api.steps.ProjectSteps;
 import common.ProjectContext;
 import org.junit.jupiter.api.extension.*;
 
-public class ProjectExtension
+public class CreateAndDeleteProjectExtension
         implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     private static final String PROJECT_CONTEXT = "projectContext";
 
     private static final ExtensionContext.Namespace NAMESPACE =
-            ExtensionContext.Namespace.create(ProjectExtension.class);
+            ExtensionContext.Namespace.create(CreateAndDeleteProjectExtension.class);
 
     @Override
     public void beforeEach(ExtensionContext context) {

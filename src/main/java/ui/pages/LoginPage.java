@@ -2,31 +2,35 @@ package ui.pages;
 
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 
-public class LoginPage {
+public class LoginPage extends BasePage<LoginPage> {
+
+    private static final String INVALID_USER_NAME_OR_PASSWORD_MESSAGE = "Incorrect username or password.";
 
     private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");
     private final SelenideElement loginButton = $(".loginButton");
-    private final SelenideElement registerLink = $("a[href*='registerUser']");
+    private final SelenideElement incorrectPasswordMessageElement = $("#errorMessage");
 
-    public LoginPage openPage() {
-        open("/login.html");
-        usernameInput.shouldBe(visible);
-        return this;
+    @Override
+    public String url() {
+        return "/login.html";
     }
 
-    public RegisterUserPage openRegister() {
-        registerLink.shouldBe(visible).click();
-        return new RegisterUserPage();
-    }
-
-    public void login(String username, String password) {
+    public LoginPage login(String username, String password) {
         usernameInput.setValue(username);
         passwordInput.setValue(password);
         loginButton.click();
+        return this;
+    }
+
+    public LoginPage checkErrorMessage() {
+        elementShouldHaveText(incorrectPasswordMessageElement, INVALID_USER_NAME_OR_PASSWORD_MESSAGE);
+        return this;
+    }
+
+    public MainPage goToMainPage() {
+        return new MainPage();
     }
 }

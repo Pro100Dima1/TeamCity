@@ -1,6 +1,9 @@
 package api;
 
-import api.data.BuildInfo;
+import common.annotations.CreateAndDeleteUser;
+import common.data.BuildInfo;
+import api.generators.BuildCommands;
+import api.generators.CommandLineCommand;
 import api.models.build.BuildResponse;
 import api.models.build_step.CreateBuildStepRequest;
 import api.models.build_type.BuildTypeResponse;
@@ -9,16 +12,15 @@ import api.models.comparison.ModelAssertions;
 import api.steps.BuildSteps;
 import common.ProjectContext;
 import common.annotations.EnableAgent;
-import common.annotations.Project;
-import common.annotations.User;
+import common.annotations.CreateAndDeleteProject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
-@User
 public class HappyPathTest extends BaseTest {
     @Test
-    @Project
+    @CreateAndDeleteUser
+    @CreateAndDeleteProject
     @EnableAgent(enabled = true)
     @ResourceLock(
             value = "teamcity-agent",
@@ -37,10 +39,12 @@ public class HappyPathTest extends BaseTest {
         String buildTypeId = buildResponse.getId();
 
         // Create Build step
-        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine();
+        CommandLineCommand command = BuildCommands.randomCommandLineCommand();
+
+        CreateBuildStepRequest buildStepRequest = BuildSteps.commandLine(command);
         BuildSteps.addBuildStep(buildTypeId, buildStepRequest);
 
-        BuildTypeResponse build = BuildSteps.getBuild(buildResponse);
+        BuildTypeResponse build = BuildSteps.getBuild(buildResponse.getId());
         BuildSteps.assertBuildStep(
                 build,
                 buildTypeId,
