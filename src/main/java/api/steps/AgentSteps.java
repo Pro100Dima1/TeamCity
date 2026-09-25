@@ -52,7 +52,6 @@ public class AgentSteps {
         ).get(Map.of("agentLocator", "id:" + DEFAULT_AGENT_ID));
     }
 
-    // Метод для получения списка всех агентов
     public static List<AgentResponse> getAllAgents() {
         return new ValidatedCrudRequester<AgentResponse>(
                 RequestSpecs.userSpec(),

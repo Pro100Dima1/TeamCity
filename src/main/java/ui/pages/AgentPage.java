@@ -62,14 +62,12 @@ public class AgentPage extends BasePage<AgentPage> {
         return this;
     }
 
-    // Подтверждение выключения агента
     public AgentPage confirmDisable() {
         elementShouldBeVisible(submitDisableButton);
         executeJavaScript("arguments[0].click();", submitDisableButton);
         return this;
     }
 
-    // Подтверждение включения агента
     public AgentPage confirmEnable() {
         elementShouldBeVisible(submitEnableButton);
         executeJavaScript("arguments[0].click();", submitEnableButton);
