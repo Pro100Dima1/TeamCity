@@ -1,4 +1,4 @@
-name: Checkstyle & TeamCity Startup
+name: Checkstyle & TeamCity Cloud Startup
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
 
 jobs:
   infrastructure:
-    name: Code Control & Server Startup
-    runs-on: ubuntu-latest
+    name: Code Control & Cloud Server Startup
+    runs-on: ubuntu-latest # Возвращаем облачный сервер GitHub
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,10 +38,3 @@ jobs:
         run: |
           echo "Waiting for TeamCity Server to fully initialize..."
           timeout 480s sh -c 'until curl -s -I http://localhost:8111/login.html | grep "200 OK" > /dev/null; do sleep 10; done'
-
-      - name: Extract User Token from Docker Logs
-        run: |
-          echo "Extracting Super User token from server startup logs..."
-          sleep 10
-          TOKEN=$(docker logs teamcity-server 2>&1 | grep -oP "Super User Token:\s+\K\d+" || echo "not_found")
-          echo "Extracted Token: $TOKEN"
