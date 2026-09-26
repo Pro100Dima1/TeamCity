@@ -29,7 +29,7 @@ jobs: # Этапы работы пайплайна
         run: docker network create test-network
 
       - name: Start Selenoid with Chrome
-        uses: Xotabu4/action-selenoid@v1
+        uses: Xotabu4/selenoid-github-action@v2
         with:
           chrome_version: 'latest'
           selenoid_version: 'latest-release'
