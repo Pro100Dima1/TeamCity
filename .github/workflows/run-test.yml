@@ -1,4 +1,4 @@
-name: Checkstyle Verification
+name: Checkstyle & TeamCity Startup
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkstyle:
-    name: Code Quality Control
+  infrastructure:
+    name: Code Control & Server Startup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
@@ -22,3 +22,26 @@ jobs:
 
       - name: Run Checkstyle
         run: mvn checkstyle:check
+
+      - name: Create Custom Docker Network
+        run: docker network create test-network
+
+      - name: Start TeamCity Server
+        run: |
+          docker run -d --name teamcity-server \
+            --network test-network \
+            -p 8111:8111 \
+            -e TEAMCITY_SERVER_OPTS="-Dteamcity.startup.maintenance=false" \
+            jetbrains/teamcity-server:latest
+
+      - name: Wait for TeamCity to be ready
+        run: |
+          echo "Waiting for TeamCity Server to fully initialize..."
+          timeout 480s sh -c 'until curl -s -I http://localhost:8111/login.html | grep "200 OK" > /dev/null; do sleep 10; done'
+
+      - name: Extract User Token from Docker Logs
+        run: |
+          echo "Extracting Super User token from server startup logs..."
+          sleep 10
+          TOKEN=$(docker logs teamcity-server 2>&1 | grep -oP "Super User Token:\s+\K\d+" || echo "not_found")
+          echo "Extracted Token: $TOKEN"
