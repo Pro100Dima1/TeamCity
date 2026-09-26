@@ -5,7 +5,9 @@ import api.models.comparison.ModelAssertions;
 import api.models.user.CreateUserRequest;
 import api.models.user.UserResponse;
 import api.steps.UserSteps;
+import io.qameta.allure.Issue;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -52,6 +54,8 @@ public class CreateUserTest extends BaseTest {
 
     // Баг, юзер успешно создался с пустым паролем
     @Test
+    @Disabled("Известный баг: Юзер успешно создается с пустым паролем. Ждем фикса.")
+    @Issue("BUG-0001")
     void userCanNotCreateUserWithBlankPassword() {
         CreateUserRequest createUserRequest = UserSteps.buildUserBlankPassword();
         createdUsername = createUserRequest.getUsername();

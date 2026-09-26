@@ -1,0 +1,64 @@
+name: Run tests
+
+# Триггер
+on: [ push, workflow_dispatch ]
+
+jobs: # Этапы работы пайплайна
+  run-tests:
+    name: Set up services (review apps) and run tests
+    runs-on: ubuntu-latest
+    steps: # Шаги внутри job
+      - name: Checkout repository # Копирование файлов репозитория внутрь CI агента
+        uses: actions/checkout@v4
+
+      - name: Set up JDK # Установка JDK для работы с проектом
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+
+      - name: Cache Maven repository # Кэширование репозитория Maven для ускорения сборки
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Create Custom Docker Network # Создаем общую Docker-сеть для контейнеров
+        run: docker network create test-network
+
+      - name: Start Selenoid with Chrome
+        uses: Xotabu4/action-selenoid@v1
+        with:
+          chrome_version: 'latest'
+          selenoid_version: 'latest-release'
+          # Добавляем Selenoid в общую сеть, чтобы создаваемые браузеры видели TeamCity
+          selenoid_args: '--network test-network'
+
+      - name: Start TeamCity Server
+        run: |
+          docker run -d --name teamcity-server \
+            --network test-network \
+            -p 8111:8111 \
+            -e TEAMCITY_SERVER_OPTS="-Dteamcity.startup.maintenance=false" \
+            jetbrains/teamcity-server:latest
+
+      - name: Wait for TeamCity to be ready
+        run: |
+          echo "Waiting for TeamCity Server to fully initialize..."
+          timeout 300s sh -c 'until curl -s -I http://localhost:8111/login.html | grep "200 OK" > /dev/null; do sleep 10; done'
+
+      - name: Run tests # Запуск тестов с Maven
+        run: ./mvnw clean test -q
+        env:
+          # 1. API тесты запускаются на хосте, для них TeamCity доступен по localhost
+          APIBASEURL: http://localhost:8111
+
+          # 2. Браузер в Selenoid должен открывать TeamCity по имени контейнера в Docker-сети
+          TEAMCITY_URL_FOR_UI: http://teamcity-server:8111
+
+          # 3. Адрес удаленного вебдрайвера (куда Selenide шлет команды управления)
+          UIBASEURL: http://localhost:4444/wd/hub
+
+          TEAMCITY_TOKEN: ${{ secrets.TEAMCITY_TOKEN }}
