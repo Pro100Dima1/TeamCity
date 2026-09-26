@@ -1,6 +1,5 @@
 name: Checkstyle Verification
 
-# Пайплайн запускается при каждом коммите (пуше)
 on:
   push:
     branches: [ nikita_ci ]
@@ -30,5 +29,5 @@ jobs:
 
       - name: Run Checkstyle Verification
         run: |
-          echo "Запуск статического анализа кода автотестов"
+          chmod +x mvnw
           ./mvnw checkstyle:check
