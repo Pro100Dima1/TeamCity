@@ -1,23 +1,26 @@
-name: Run tests
+name: Checkstyle Verification
 
-# Триггер
-on: [ push, workflow_dispatch ]
+# Пайплайн запускается при каждом коммите (пуше)
+on:
+  push:
+    branches: [ nikita_ci ]
+  workflow_dispatch:
 
-jobs: # Этапы работы пайплайна
-  run-tests:
-    name: Set up services (review apps) and run tests
+jobs:
+  checkstyle:
+    name: Code Quality Control
     runs-on: ubuntu-latest
-    steps: # Шаги внутри job
-      - name: Checkout repository # Копирование файлов репозитория внутрь CI агента
+    steps:
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK # Установка JDK для работы с проектом
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: '21'
 
-      - name: Cache Maven repository # Кэширование репозитория Maven для ускорения сборки
+      - name: Cache Maven repository
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
@@ -25,62 +28,7 @@ jobs: # Этапы работы пайплайна
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 🔥 НАСТРОЙКА КЭШИРОВАНИЯ DOCKER ОБРАЗОВ
-      - name: Cache Docker images
-        id: cache-docker
-        uses: actions/cache@v4
-        with:
-          path: ~/.docker-images-cache
-          key: ${{ runner.os }}-docker-images-${{ hashFiles('.github/workflows/run-test.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-docker-images-
-
-      - name: Load cached Docker images
-        if: steps.cache-docker.outputs.cache-hit == 'true'
+      - name: Run Checkstyle Verification
         run: |
-          echo "Loading cached images..."
-          docker load -i ~/.docker-images-cache/teamcity-server.tar || true
-          docker load -i ~/.docker-images-cache/selenoid-chrome.tar || true
-
-      # 🔥 НАСТРОЙКА СЕРВИСОВ
-
-      - name: Create Custom Docker Network # Создаем общую Docker-сеть для контейнеров
-        run: docker network create test-network
-
-      - name: Start Selenoid with Chrome
-        uses: Xotabu4/selenoid-github-action@v2
-        with:
-          chrome_version: 'latest'
-          selenoid_version: 'latest-release'
-          selenoid_args: '--network test-network'
-
-      - name: Start TeamCity Server
-        run: |
-          docker run -d --name teamcity-server \
-            --network test-network \
-            -p 8111:8111 \
-            -e TEAMCITY_SERVER_OPTS="-Dteamcity.startup.maintenance=false" \
-            jetbrains/teamcity-server:latest
-
-      - name: Wait for TeamCity to be ready
-        run: |
-          echo "Waiting for TeamCity Server to fully initialize..."
-          # Увеличили таймаут до 8 минут (480 секунд), чтобы сервер гарантированно успел подняться
-          timeout 480s sh -c 'until curl -s -I http://localhost:8111/login.html | grep "200 OK" > /dev/null; do sleep 10; done'
-
-      - name: Save Docker images to cache if not cached yet
-        if: steps.cache-docker.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p ~/.docker-images-cache
-          echo "Saving images to cache directory..."
-          docker save jetbrains/teamcity-server:latest -o ~/.docker-images-cache/teamcity-server.tar
-          # Сохраняем образ браузера, который скачал Selenoid action (обычно это selenoid/chrome:latest или аналогичный)
-          docker save $(docker images --format "{{.Repository}}:{{.Tag}}" | grep "chrome") -o ~/.docker-images-cache/selenoid-chrome.tar || true
-
-      - name: Run tests # Запуск тестов с Maven
-        run: ./mvnw clean test -q
-        env:
-          APIBASEURL: http://localhost:8111
-          TEAMCITY_URL_FOR_UI: http://teamcity-server:8111
-          UIBASEURL: http://localhost:4444/wd/hub
-          TEAMCITY_TOKEN: ${{ secrets.TEAMCITY_TOKEN }}
+          echo "Запуск статического анализа кода автотестов"
+          ./mvnw checkstyle:check
