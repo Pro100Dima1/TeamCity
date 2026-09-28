@@ -67,8 +67,23 @@ jobs:
           chmod +x restart_docker.sh
           ./restart_docker.sh
 
-      - name: Wait for Server Warmup
-        run: sleep 40
+      # УМНОЕ ДИНАМИЧЕСКОЕ ОЖИДАНИЕ СЕРВЕРА (ВСТАВЛЕНО СЮДА ВЗАМЕН SLEEP 40)
+      - name: Wait for TeamCity Server Token
+        run: |
+          echo "⏳ Ожидание инициализации TeamCity и генерации супертокена..."
+          TIMEOUT=180
+          ELAPSED=0
+          until docker logs teamcity-server 2>&1 | grep -i 'Super user authentication token' > /dev/null || [ $ELAPSED -eq $TIMEOUT ]; do
+            sleep 5
+            ELAPSED=$((ELAPSED + 5))
+            echo "⌛ Прошло $ELAPSED сек... Сервер всё ещё настраивает базу данных..."
+          done
+          
+          if [ $ELAPSED -eq $TIMEOUT ]; then
+            echo "❌ Превышено время ожидания старта TeamCity (3 минуты)."
+            exit 1
+          fi
+          echo "✅ TeamCity успешно сгенерировал токен! Начинаем извлечение..."
 
       # Извлечение токера силами хоста GitHub Actions перед запуском тестов
       - name: Extract Super User Token

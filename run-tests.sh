@@ -10,15 +10,13 @@ ALLURE_REPORT_DIR=$TEST_OUTPUT_DIR/allure-report
 
 # 1. Автоматически извлекаем супертокен из контейнера на хосте
 echo ">>> Извлечение супертокена из логов TeamCity..."
-RAW_TOKEN=$(docker logs teamcity-server 2>&1 | grep -i 'Super user authentication token' | tail -1)
-FETCHED_TOKEN=$(echo "$RAW_TOKEN" | grep -oE '[0-9]+' | tr -d '\r\n ')
-
-if [ -z "$FETCHED_TOKEN" ]; then
-  echo "Не удалось автоматически найти токен в логах контейнера teamcity-server."
-  echo "Будет использовано дефолтное значение 'auto'."
-  FETCHED_TOKEN="auto"
+if [ -n "$SUPERUSER_TOKEN" ] && [ "$SUPERUSER_TOKEN" != "auto" ]; then
+  FETCHED_TOKEN=$SUPERUSER_TOKEN
+  echo "✅ Токен взят из окружения CI: $FETCHED_TOKEN"
 else
-  echo "Супертокен успешно извлечен и передан в переменные окружения."
+  RAW_TOKEN=$(docker logs teamcity-server 2>&1 | grep -i 'Super user authentication token' | tail -1)
+  FETCHED_TOKEN=$(echo "$RAW_TOKEN" | grep -oE '[0-9]+' | tr -d '\r\n ')
+  echo "✅ Токен извлечен локально: $FETCHED_TOKEN"
 fi
 
 # Собираем Docker образ
@@ -43,18 +41,16 @@ run_container_flow() {
     -e TEST_PROFILE="$profile" \
     -e APIBASEURL=http://host.docker.internal:8111 \
     -e UIBASEURL=http://host.docker.internal:8111 \
-    -e SUPERUSER_TOKEN="$SUPERUSER_TOKEN" \
-     $IMAGE_NAME mvn test -P "$profile" -Dbrowser="$browser" -Dallure.results.directory=/app/allure-results > "$TEST_OUTPUT_DIR/logs/${profile}_${browser}.log" 2>&1 &
+    $IMAGE_NAME mvn test -P "$profile" -Dbrowser="$browser" -Dsuperuser.token="$FETCHED_TOKEN" -Dallure.results.directory=/app/allure-results > "$TEST_OUTPUT_DIR/logs/${profile}_${browser}.log" 2>&1 &
 }
 
 # 2. ПРОВЕРКА: Запускать параллельно или один поток?
 if [ -n "$TEST_PROFILE" ]; then
-  # ЕСЛИ АРГУМЕНТ ЕСТЬ: Запускаем один контейнер (как раньше)
   echo ">>> Запущен одиночный поток для профиля: $TEST_PROFILE"
-  run_container_flow "$TEST_PROFILE" "chrome"
+  CURRENT_BROWSER=${BROWSER_NAME:-chrome}
+  run_container_flow "$TEST_PROFILE" "$CURRENT_BROWSER"
   wait
 else
-  # ЕСЛИ АРГУМЕНТА НЕТ (Клик по стрелочке): Запускаем «веер» параллельно в фоне
   echo ">>> Запуск параллельного тестирования (API + UI Chrome/Firefox/Opera)..."
 
   # Копируем историю Allure прошлых запусков (для графиков трендов)
@@ -64,23 +60,21 @@ else
       cp -r "$LAST_REPORT/history" "$ALLURE_RESULTS_DIR/history"
   fi
 
-  # Запускаем 4 фоновых процесса одновременно (благодаря знаку & внутри функции)
+  # Запускаем 4 фоновых процесса одновременно
   run_container_flow "api" "chrome"
   run_container_flow "ui" "chrome"
   run_container_flow "ui" "firefox"
   run_container_flow "ui" "opera"
 
   echo "⏳ Ожидание завершения выполнения всех параллельных потоков..."
-  wait # Ждем, пока все 4 контейнера финишируют
+  wait
 fi
 
-# 3. Проверка Checkstyle (валидация кода)
+# 3. Проверка Checkstyle (Исправлено тут!)
 echo ">>> Проверка качества кода (Checkstyle)..."
-    $IMAGE_NAME mvn test -P "$profile" -Dbrowser="$browser" -Dsuperuser.token="$SUPERUSER_TOKEN" -Dallure.results.directory=/app/allure-results > "$TEST_OUTPUT_DIR/logs/${profile}_${browser}.log" 2>&1 &
+MSYS_NO_PATHCONV=1 docker run --rm $IMAGE_NAME mvn checkstyle:check > "$TEST_OUTPUT_DIR/logs/checkstyle.log" 2>&1
 
 # 4. Схлопывание в один Allure отчет
-# Автоматически прописываем имя окружения в результаты перед генерацией отчета
-# Прописываем метки окружения строго в папки с json-результатами
 mkdir -p "$ALLURE_RESULTS_DIR/api_chrome" && echo "Browser=API" > "$ALLURE_RESULTS_DIR/api_chrome/environment.properties"
 mkdir -p "$ALLURE_RESULTS_DIR/ui_chrome" && echo "Browser=UI_Chrome" > "$ALLURE_RESULTS_DIR/ui_chrome/environment.properties"
 mkdir -p "$ALLURE_RESULTS_DIR/ui_firefox" && echo "Browser=UI_Firefox" > "$ALLURE_RESULTS_DIR/ui_firefox/environment.properties"
@@ -92,7 +86,7 @@ if [ -d "$ALLURE_RESULTS_DIR" ]; then
         allure generate "$ALLURE_RESULTS_DIR" -o "$ALLURE_REPORT_DIR" --clean
         echo "📊 Allure отчет успешно сгенерирован: $ALLURE_REPORT_DIR/index.html"
     else
-        echo "⚠️ Утилита allure-cli не найдена на хосте. Сырые результаты сохранены в: $ALLURE_RESULTS_DIR"
+        echo "⚠️ Утилита allure-cli не найдена на хосте. Сырые результаты сохранены in: $ALLURE_RESULTS_DIR"
     fi
 fi
 
