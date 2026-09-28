@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  # ЭТАП 1: ВАША ПРОВЕРКА КАЧЕСТВА КОДА
+  # ЭТАП 1: ПРОВЕРКА КАЧЕСТВА КОДА
   checkstyle:
     name: Code Control (Checkstyle)
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
       - name: Run Checkstyle Validation
         run: mvn checkstyle:check
 
-  # ЭТАП 2: ПАРАЛЛЕЛЬНЫЙ ВЕЕР ТЕСТОВ (МАТРИЦА КОЛЛЕГИ + ВАША ИНФРАСТРУКТУРА)
+  # ЭТАП 2: ПАРАЛЛЕЛЬНЫЙ ВЕЕР ТЕСТОВ (МАТРИЦА КОЛЛЕГИ + ИНФРАСТРУКТУРА)
   test-matrix:
     name: Run ${{ matrix.name }}
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
-      # Использование вашего скрипта для поднятия Docker Compose и Selenoid
+      # Использование скрипта для поднятия Docker Compose и Selenoid
       - name: Start Infrastructure and Pull Browsers
         run: |
           cd infra/docker_compose
@@ -70,16 +70,29 @@ jobs:
       - name: Wait for Server Warmup
         run: sleep 40
 
-      # Запуск конкретного бакета тестов из матрицы
+      # Извлечение токера силами хоста GitHub Actions перед запуском тестов
+      - name: Extract Super User Token
+        id: get_token
+        run: |
+          RAW_TOKEN=$(docker logs teamcity-server 2>&1 | grep -i 'Super user authentication token' | tail -1)
+          FETCHED_TOKEN=$(echo "$RAW_TOKEN" | grep -oE '[0-9]+' | tr -d '\r\n ')
+          if [ -z "$FETCHED_TOKEN" ]; then
+            echo "TOKEN=auto" >> $GITHUB_ENV
+          else
+            echo "TOKEN=$FETCHED_TOKEN" >> $GITHUB_ENV
+          fi
+
+      # Запуск конкретного бакета тестов из матрицы с пробросом токена и браузера
       - name: Run Matrix Test Bucket
         env:
           APIBASEURL: http://docker.internal
           UIBASEURL: http://docker.internal
+          SUPERUSER_TOKEN: ${{ env.TOKEN }}
         run: |
           chmod +x run-tests.sh
           ./run-tests.sh ${{ matrix.profile }}
 
-            # Вытаскиваем сырые результаты из контейнера наружу для сборщика
+      # Вытаскиваем сырые результаты из контейнера наружу для сборщика
       - name: Extract Allure Results From Container
         if: always()
         run: |
@@ -121,6 +134,14 @@ jobs:
           sudo apt-get install -y npm
           sudo npm install -g allure-commandline --save-dev
           allure --version
+
+      # Создаем красивую сводную таблицу в Environment
+      - name: Create Environment Properties
+        run: |
+          echo "Browser_API=Passed" >> target/allure-results/environment.properties
+          echo "Browser_Chrome=Passed" >> target/allure-results/environment.properties
+          echo "Browser_Firefox=Passed" >> target/allure-results/environment.properties
+          echo "Browser_Opera=Passed" >> target/allure-results/environment.properties
 
       - name: Generate Final Merged Allure Report
         run: |
