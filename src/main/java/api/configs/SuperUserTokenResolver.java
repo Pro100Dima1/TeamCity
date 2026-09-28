@@ -26,6 +26,14 @@ public final class SuperUserTokenResolver {
     }
 
     public static String resolve() {
+        // 1. СНАЧАЛА ПРОВЕРЯЕМ ПЕРЕМЕННУЮ ОКРУЖЕНИЯ (Для GitHub Actions)
+        String envToken = System.getenv("SUPERUSER_TOKEN");
+        if (envToken != null && !envToken.isBlank() && !"auto".equalsIgnoreCase(envToken.trim())) {
+            cachedToken = envToken.trim();
+            return cachedToken;
+        }
+
+        // 2. ЗАТЕМ ИДЁТ СТАРАЯ ПРОВЕРКА ПРОПЕРТЕЙ
         String configured = Config.getProperty("superuser.token");
         if (configured != null && !configured.isBlank() && !"auto".equalsIgnoreCase(configured.trim())) {
             return configured.trim();
