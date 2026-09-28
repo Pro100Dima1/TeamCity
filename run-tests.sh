@@ -35,16 +35,16 @@ run_container_flow() {
   local browser=$2
   echo "🚀 Запуск потока: Профиль [$profile], Браузер [$browser]..."
 
-   MSYS_NO_PATHCONV=1 docker run --rm \
-      --add-host=host.docker.internal:host-gateway \
-      --hostname="${profile}_${browser}" \
+  MSYS_NO_PATHCONV=1 docker run --rm \
+    --add-host=host.docker.internal:host-gateway \
+    --hostname="${profile}_${browser}" \
     -v "$TEST_OUTPUT_DIR/logs":/app/logs \
     -v "$ALLURE_RESULTS_DIR/${profile}_${browser}":/app/allure-results \
     -e TEST_PROFILE="$profile" \
     -e APIBASEURL=http://host.docker.internal:8111 \
     -e UIBASEURL=http://host.docker.internal:8111 \
-    -e SUPERUSER_TOKEN="$FETCHED_TOKEN" \
-    $IMAGE_NAME mvn test -P "$profile" -Dbrowser="$browser" > "$TEST_OUTPUT_DIR/logs/${profile}_${browser}.log" 2>&1 &
+    -e SUPERUSER_TOKEN="$SUPERUSER_TOKEN" \
+     $IMAGE_NAME mvn test -P "$profile" -Dbrowser="$browser" -Dallure.results.directory=/app/allure-results > "$TEST_OUTPUT_DIR/logs/${profile}_${browser}.log" 2>&1 &
 }
 
 # 2. ПРОВЕРКА: Запускать параллельно или один поток?
@@ -76,7 +76,7 @@ fi
 
 # 3. Проверка Checkstyle (валидация кода)
 echo ">>> Проверка качества кода (Checkstyle)..."
-MSYS_NO_PATHCONV=1 docker run --rm $IMAGE_NAME mvn checkstyle:check > "$TEST_OUTPUT_DIR/logs/checkstyle.log" 2>&1
+    $IMAGE_NAME mvn test -P "$profile" -Dbrowser="$browser" -Dsuperuser.token="$SUPERUSER_TOKEN" -Dallure.results.directory=/app/allure-results > "$TEST_OUTPUT_DIR/logs/${profile}_${browser}.log" 2>&1 &
 
 # 4. Схлопывание в один Allure отчет
 # Автоматически прописываем имя окружения в результаты перед генерацией отчета

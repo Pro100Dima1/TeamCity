@@ -26,17 +26,18 @@ public final class SuperUserTokenResolver {
     }
 
     public static String resolve() {
-        // 1. СНАЧАЛА ПРОВЕРЯЕМ ПЕРЕМЕННУЮ ОКРУЖЕНИЯ (Для GitHub Actions)
+        // 1. Проверяем, пробросил ли нам Maven свойство из pom.xml
+        String configured = Config.getProperty("superuser.token");
+        if (configured != null && !configured.isBlank() && !"auto".equalsIgnoreCase(configured.trim())) {
+            cachedToken = configured.trim();
+            return cachedToken;
+        }
+
+        // 2. РЕЗЕРВНЫЙ ВАРИАНТ: Читаем переменную окружения напрямую (на случай сбоев Surefire)
         String envToken = System.getenv("SUPERUSER_TOKEN");
         if (envToken != null && !envToken.isBlank() && !"auto".equalsIgnoreCase(envToken.trim())) {
             cachedToken = envToken.trim();
             return cachedToken;
-        }
-
-        // 2. ЗАТЕМ ИДЁТ СТАРАЯ ПРОВЕРКА ПРОПЕРТЕЙ
-        String configured = Config.getProperty("superuser.token");
-        if (configured != null && !configured.isBlank() && !"auto".equalsIgnoreCase(configured.trim())) {
-            return configured.trim();
         }
 
         if (cachedToken != null) {
