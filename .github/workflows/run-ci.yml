@@ -85,8 +85,8 @@ jobs:
       # Запуск конкретного бакета тестов из матрицы с пробросом токена и браузера
       - name: Run Matrix Test Bucket
         env:
-          APIBASEURL: http://docker.internal
-          UIBASEURL: http://docker.internal
+          APIBASEURL: http://host.docker.internal:8111
+          UIBASEURL: http://host.docker.internal:8111
           SUPERUSER_TOKEN: ${{ env.TOKEN }}
         run: |
           chmod +x run-tests.sh
