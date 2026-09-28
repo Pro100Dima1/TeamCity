@@ -109,9 +109,9 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
-  # ЭТАП 3: СХЛОПЫВАНИЕ РЕЗУЛЬТАТОВ И ПУБЛИКАЦИЯ В ИНТЕРНЕТ
+  # ЭТАП 3: СХЛОПЫВАНИЕ В ОДИН АВТОНОМНЫЙ ФАЙЛ INDEX.HTML
   allure-report:
-    name: Merge Results & Publish Allure Report
+    name: Merge Results & Generate Single HTML Report
     runs-on: ubuntu-latest
     needs: test-matrix
     if: always()
@@ -120,7 +120,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Скачиваем все 4 архива результатов и склеиваем их в одну папку
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
@@ -135,7 +134,6 @@ jobs:
           sudo npm install -g allure-commandline --save-dev
           allure --version
 
-      # Создаем красивую сводную таблицу в Environment
       - name: Create Environment Properties
         run: |
           echo "Browser_API=Passed" >> target/allure-results/environment.properties
@@ -143,14 +141,16 @@ jobs:
           echo "Browser_Firefox=Passed" >> target/allure-results/environment.properties
           echo "Browser_Opera=Passed" >> target/allure-results/environment.properties
 
-      - name: Generate Final Merged Allure Report
+      # Собираем отчет в режиме --single-file (всё упаковывается в один index.html)
+      - name: Generate Single File Allure Report
         run: |
-          allure generate target/allure-results --clean -o allure-report
+          allure generate target/allure-results --clean --single-file -o single-report-dir
 
-      # Автоматическая публикация отчёта на GitHub Pages
-      - name: Publish Allure Report to GitHub Pages
+      # Выкладываем этот index.html прямо в список артефактов на Summary
+      - name: Upload Final index.html to Artifacts
         if: always()
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
+          name: single-file-allure-report
+          path: single-report-dir/index.html
+          retention-days: 7
