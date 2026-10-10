@@ -1,0 +1,441 @@
+name: TeamCity Tests
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  COMPOSE_FILE: infrastructure/docker_compose/docker-compose.yml
+  TEAMCITY_URL: http://localhost:8111
+  UIBASEURL: http://teamcity-server:8111
+
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1) Run suites in parallel (each job gets its own TeamCity + Selenoid stack)
+  # ---------------------------------------------------------------------------
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: api
+            tests: 'api/**/*Test.java'
+            browser: chrome
+            browserVersion: '128.0'
+          - name: ui-chrome
+            tests: 'ui/**/*Test.java'
+            browser: chrome
+            browserVersion: '128.0'
+          - name: ui-firefox
+            tests: 'ui/**/*Test.java'
+            browser: firefox
+            browserVersion: '125.0'
+
+    steps:
+      # --- Checkout & JDK ----------------------------------------------------
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '21'
+          cache: maven
+
+      # --- Start infrastructure ----------------------------------------------
+      # Precondition UI install always uses Chrome, so pull it for every suite.
+      - name: Start TeamCity + Selenoid
+        run: |
+          docker compose -f "$COMPOSE_FILE" up -d
+          docker pull selenoid/vnc_chrome:128.0
+
+      - name: Pull matrix browser image
+        if: matrix.browser != 'chrome'
+        run: docker pull "selenoid/vnc:${{ matrix.browser }}_${{ matrix.browserVersion }}"
+
+      # --- Wait until TeamCity accepts HTTP ----------------------------------
+      - name: Wait for TeamCity HTTP
+        run: |
+          for i in $(seq 1 60); do
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$TEAMCITY_URL/mnt" || true)
+            echo "Attempt $i/60: status=$status"
+            [ "$status" = "200" ] && exit 0
+            sleep 5
+          done
+          docker compose -f "$COMPOSE_FILE" logs --tail 300 teamcity-server
+          exit 1
+
+      # --- Fresh-server setup (admin user, agent, auth) ----------------------
+      # Super User token is read lazily from container logs (superuser.token=auto).
+      - name: Install and configure TeamCity
+        env:
+          BROWSER: chrome
+          BROWSERVERSION: '128.0'
+        run: mvn -B --no-transfer-progress test -Dgroups=precondition -DexcludedGroups=
+
+      # Precondition Allure / swagger files must not mix into suite reports.
+      - name: Clear precondition Allure and Swagger coverage results
+        run: rm -rf target/allure-results target/swagger-coverage-output
+
+      - name: Wait for TeamCity ready
+        run: |
+          for i in $(seq 1 60); do
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$TEAMCITY_URL/healthCheck/ready" || true)
+            echo "Attempt $i/60: ready=$status"
+            [ "$status" = "200" ] && exit 0
+            sleep 5
+          done
+          docker compose -f "$COMPOSE_FILE" logs --tail 300 teamcity-server
+          exit 1
+
+      # --- Suite under test --------------------------------------------------
+      - name: Run tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BROWSERVERSION: ${{ matrix.browserVersion }}
+        run: |
+          mvn -B --no-transfer-progress \
+            test \
+            -Dtest='${{ matrix.tests }}'
+
+      # --- Package Allure results for the report job -------------------------
+      - name: Tag Allure results with suite identity
+        if: always()
+        run: |
+          mkdir -p target/allure-results
+
+          cat > target/allure-results/environment.properties <<EOF
+          Suite=${{ matrix.name }}
+          Browser=${{ matrix.browser }}
+          Browser.Version=${{ matrix.browserVersion }}
+          Run.Id=${{ github.run_id }}
+          Branch=${{ github.ref_name }}
+          EOF
+
+          cat > target/allure-results/executor.json <<EOF
+          {
+            "name": "GitHub Actions",
+            "type": "github",
+            "reportName": "TeamCity Tests",
+            "buildName": "${{ matrix.name }} #${{ github.run_number }}",
+            "buildOrder": "${{ github.run_number }}",
+            "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }
+          EOF
+
+          if ls target/allure-results/*-result.json >/dev/null 2>&1; then
+            for f in target/allure-results/*-result.json; do
+              jq -c --arg suite "${{ matrix.name }}" --arg browser "${{ matrix.browser }}" '
+                .historyId = ((.historyId // .fullName // .uuid) + "::" + $suite)
+                | .labels = (
+                    ((.labels // []) | map(select(.name != "parentSuite")))
+                    + [{"name":"parentSuite","value":$suite}]
+                    + [{"name":"tag","value":$suite}]
+                  )
+                | .parameters = ((.parameters // [])
+                    + [{"name":"Suite","value":$suite,"excluded":false,"mode":"default"}]
+                    + [{"name":"Browser","value":$browser,"excluded":false,"mode":"default"}])
+              ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+            done
+          fi
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.name }}
+          path: target/allure-results
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload Swagger coverage output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swagger-coverage-${{ matrix.name }}
+          path: target/swagger-coverage-output
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Container logs on failure
+        if: failure()
+        run: |
+          docker compose -f "$COMPOSE_FILE" logs --tail 500 teamcity-server
+          docker compose -f "$COMPOSE_FILE" logs --tail 500 teamcity-agent
+          docker compose -f "$COMPOSE_FILE" logs --tail 300 selenoid
+
+      - name: Stop TeamCity environment
+        if: always()
+        run: docker compose -f "$COMPOSE_FILE" down -v --remove-orphans
+
+  # ---------------------------------------------------------------------------
+  # 2) Dashboard + Allure + Swagger coverage → GitHub Pages
+  # ---------------------------------------------------------------------------
+  allure-report:
+    name: Generate and Publish Reports
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Full history needed for "new tests last 7/30 days" on the dashboard
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # --- Collect artifacts -------------------------------------------------
+      - name: Download suite Allure results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          path: allure-input
+          merge-multiple: false
+
+      - name: Download Swagger coverage outputs
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: swagger-coverage-*
+          path: swagger-input
+          merge-multiple: false
+
+      - name: Download previous published site
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          name: allure-report
+          path: previous-allure-report
+          workflow: tests.yml
+          branch: ${{ github.ref_name }}
+          workflow_conclusion: ""
+          check_artifacts: true
+          search_artifacts: true
+          if_no_artifact_found: warn
+
+      # --- Allure ------------------------------------------------------------
+      - name: Assemble Allure results and history
+        run: |
+          set -euo pipefail
+          mkdir -p allure-results
+
+          for suite_dir in allure-input/allure-results-*; do
+            [ -d "$suite_dir" ] || continue
+            suite="$(basename "$suite_dir" | sed 's/^allure-results-//')"
+            mkdir -p "allure-results/${suite}"
+            cp -a "$suite_dir"/. "allure-results/${suite}/"
+          done
+
+          mkdir -p allure-results/_meta
+          cat > allure-results/_meta/environment.properties <<EOF
+          Suites=api, ui-chrome, ui-firefox
+          Run.Id=${{ github.run_id }}
+          Run.Number=${{ github.run_number }}
+          Branch=${{ github.ref_name }}
+          Commit=${{ github.sha }}
+          Workflow=${{ github.workflow }}
+          EOF
+
+          cat > allure-results/_meta/executor.json <<EOF
+          {
+            "name": "GitHub Actions",
+            "type": "github",
+            "reportName": "TeamCity Tests",
+            "buildName": "Build #${{ github.run_number }}",
+            "buildOrder": "${{ github.run_number }}",
+            "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          }
+          EOF
+
+          # Support both old layout (history/) and new site layout (allure/history/)
+          if [ -d previous-allure-report/allure/history ]; then
+            cp -r previous-allure-report/allure/history allure-results/_meta/history
+          elif [ -d previous-allure-report/history ]; then
+            cp -r previous-allure-report/history allure-results/_meta/history
+          fi
+
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline@2.32.0
+
+      - name: Generate Allure report
+        run: |
+          mapfile -t RESULT_DIRS < <(find allure-results -mindepth 1 -maxdepth 1 -type d | sort)
+          allure generate "${RESULT_DIRS[@]}" --clean -o allure-report-raw
+
+      # --- Swagger coverage (Nbank-style) ------------------------------------
+      - name: Install Swagger coverage CLI
+        if: always()
+        run: |
+          set -euo pipefail
+          SWAGGER_COVERAGE_VERSION=1.5.0
+          ZIP=swagger-coverage-${SWAGGER_COVERAGE_VERSION}.zip
+          wget -q -O "$ZIP" \
+            "https://github.com/viclovsky/swagger-coverage/releases/download/${SWAGGER_COVERAGE_VERSION}/${ZIP}"
+          rm -rf .swagger-coverage-commandline
+          mkdir -p .swagger-coverage-commandline
+          unzip -o "$ZIP" -d .swagger-coverage-commandline
+          BIN=$(find .swagger-coverage-commandline -type f -name swagger-coverage-commandline | head -1)
+          if [ -z "$BIN" ]; then
+            echo "swagger-coverage-commandline binary not found after unzip"
+            exit 1
+          fi
+          chmod +x "$BIN"
+          ln -sf "$(pwd)/$BIN" .swagger-coverage-commandline/swagger-coverage-commandline
+
+      - name: Generate Swagger coverage report
+        if: always()
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          mkdir -p swagger-coverage-merged
+          if [ -d swagger-input ]; then
+            find swagger-input -type f -print0 | while IFS= read -r -d '' f; do
+              base=$(basename "$f")
+              # Avoid collisions across matrix suites
+              parent=$(basename "$(dirname "$f")")
+              cp "$f" "swagger-coverage-merged/${parent}-${base}"
+            done
+          fi
+
+          if [ -z "$(ls -A swagger-coverage-merged 2>/dev/null || true)" ]; then
+            echo "No swagger-coverage output from tests; skipping report"
+            exit 0
+          fi
+
+          BIN=.swagger-coverage-commandline/swagger-coverage-commandline
+          "$BIN" -s Swagger.txt -i swagger-coverage-merged
+          ls -la swagger-coverage-report.html || ls -la *.html || true
+
+      # --- Site: dashboard + allure + swagger --------------------------------
+      - name: Build GitHub Pages site
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -rf site
+          mkdir -p site/allure site/swagger-coverage site/data
+
+          if [ -d allure-report-raw ]; then
+            cp -a allure-report-raw/. site/allure/
+          fi
+
+          if [ -f swagger-coverage-report.html ]; then
+            cp swagger-coverage-report.html site/swagger-coverage/index.html
+            cp swagger-coverage-report.html site/swagger-coverage/swagger-coverage-report.html
+            shopt -s nullglob
+            for f in swagger-coverage-report*; do
+              cp -a "$f" site/swagger-coverage/ || true
+            done
+            if [ -d swagger-coverage-results ]; then
+              cp -a swagger-coverage-results/. site/swagger-coverage/ || true
+            fi
+          else
+            printf '%s\n' \
+              '<!DOCTYPE html><html><body>' \
+              '<h1>Swagger coverage</h1>' \
+              '<p>No coverage data for this run.</p>' \
+              '<p><a href="../">Back to dashboard</a></p>' \
+              '</body></html>' \
+              > site/swagger-coverage/index.html
+          fi
+
+          HISTORY_IN=""
+          if [ -f previous-allure-report/data/metrics-history.json ]; then
+            HISTORY_IN=previous-allure-report/data/metrics-history.json
+          fi
+
+          python3 scripts/generate-dashboard.py \
+            --results-dir allure-results \
+            --site-dir site \
+            --template scripts/dashboard/template.html \
+            --repo-root . \
+            --swagger-report swagger-coverage-report.html \
+            ${HISTORY_IN:+--history-in "$HISTORY_IN"} \
+            --run-number "${{ github.run_number }}" \
+            --run-id "${{ github.run_id }}" \
+            --branch "${{ github.ref_name }}" \
+            --commit "${{ github.sha }}" \
+            --build-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      # --- Publish -----------------------------------------------------------
+      - name: Upload site artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: site
+          retention-days: 30
+
+      - uses: actions/configure-pages@v5
+        if: always()
+
+      - uses: actions/upload-pages-artifact@v4
+        if: always()
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        if: always()
+        uses: actions/deploy-pages@v4
+
+      - name: Write report links to job summary
+        if: always()
+        run: |
+          PAGE_URL="${{ steps.deployment.outputs.page_url }}"
+          if [ -z "$PAGE_URL" ]; then
+            PAGE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          fi
+          {
+            echo "### Automation reports"
+            echo "- [Dashboard](${PAGE_URL})"
+            echo "- [Allure Report](${PAGE_URL}allure/)"
+            echo "- [Swagger API Coverage](${PAGE_URL}swagger-coverage/)"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "PAGE_URL=$PAGE_URL" >> "$GITHUB_ENV"
+
+      # Email managers only for main-branch runs (avoids noise from feature/CI branches).
+      # Required secrets: SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, MAIL_FROM, MAIL_TO
+      - name: Email dashboard link (main only)
+        if: always() && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          secure: true
+          from: ${{ secrets.MAIL_FROM }}
+          to: ${{ secrets.MAIL_TO }}
+          subject: "TeamCity Automation Report #${{ github.run_number }} (${{ job.status }})"
+          body: |
+            Automation pipeline finished on main.
+
+            Status: ${{ job.status }}
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Dashboard: ${{ env.PAGE_URL }}
+            Allure: ${{ env.PAGE_URL }}allure/
+            Swagger coverage: ${{ env.PAGE_URL }}swagger-coverage/
+
+            Commit: ${{ github.sha }}
+          html_body: |
+            <p>Automation pipeline finished on <b>main</b>.</p>
+            <ul>
+              <li><b>Status:</b> ${{ job.status }}</li>
+              <li><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Workflow run #${{ github.run_number }}</a></li>
+              <li><a href="${{ env.PAGE_URL }}">Dashboard</a></li>
+              <li><a href="${{ env.PAGE_URL }}allure/">Allure Report</a></li>
+              <li><a href="${{ env.PAGE_URL }}swagger-coverage/">Swagger API Coverage</a></li>
+            </ul>
+            <p>Commit: <code>${{ github.sha }}</code></p>
